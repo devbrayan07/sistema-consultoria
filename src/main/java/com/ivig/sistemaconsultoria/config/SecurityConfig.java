@@ -499,6 +499,44 @@ public class SecurityConfig {
                          */
 
                         .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/webhooks/mercadopago"
+                        )
+                        .permitAll()
+
+                        .requestMatchers(
+                                "/api/**"
+                        )
+                        .authenticated()
+
+                        .requestMatchers(
+                                "/api/auth/**"
+                        )
+                        .permitAll()
+
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/pagamentos",
+                                "/api/pagamentos/**"
+                        )
+                        .hasAnyRole(
+                                "USUARIO",
+                                "CONTADOR",
+                                "ADMINISTRADOR"
+                        )
+
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/pagamentos",
+                                "/api/pagamentos/**"
+                        )
+                        .hasAnyRole(
+                                "USUARIO",
+                                "CONTADOR",
+                                "ADMINISTRADOR"
+                        )
+
+                        .requestMatchers(
                                 HttpMethod.GET,
                                 "/api/**"
                         )
