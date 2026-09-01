@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Dashboard - Sistema de Consultoria
+    </title>
+
+    <link
+            rel="stylesheet"
+            href="style.css"
+    >
+</head>
+
+<body>
+
+<div id="app-layout">
+
+    <!-- =====================================================
+         HERO / BOAS-VINDAS
+    ====================================================== -->
+
+    <section class="dashboard-hero">
+
+        <div class="dashboard-hero-content">
+
+            <div class="dashboard-hero-text">
+
+                <span class="dashboard-eyebrow">
+                    Visão geral
+                </span>
+
+                <h1>
+                    Olá,
+                    <span id="dashboard-user-name">
+                        usuário
+                    </span>.
+                </h1>
+
+                <p>
+                    Aqui está um resumo das operações,
+                    documentos e obrigações das empresas.
+                </p>
+
+            </div>
+
+            <div class="dashboard-hero-date">
+
+                <div class="dashboard-date-icon">
+
+                    <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                    >
+                        <rect
+                                x="3"
+                                y="4"
+                                width="18"
+                                height="18"
+                                rx="2"
+                        ></rect>
+
+                        <line
+                                x1="16"
+                                y1="2"
+                                x2="16"
+                                y2="6"
+                        ></line>
+
+                        <line
+                                x1="8"
+                                y1="2"
+                                x2="8"
+                                y2="6"
+                        ></line>
+
+                        <line
+                                x1="3"
+                                y1="10"
+                                x2="21"
+                                y2="10"
+                        ></line>
+                    </svg>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        Hoje
+                    </span>
+
+                    <strong id="dashboard-current-date">
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         INDICADORES
+    ====================================================== -->
+
+    <section class="dashboard-stats">
+
+        <!-- EMPRESAS -->
+
+        <article class="dashboard-stat-card">
+
+            <div class="dashboard-stat-top">
+
+                <div
+                        class="
+                        dashboard-stat-icon
+                        dashboard-stat-blue
+                    "
+                >
+
+                    <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                    >
+                        <rect
+                                x="3"
+                                y="9"
+                                width="18"
+                                height="12"
+                                rx="2"
+                        ></rect>
+
+                        <path
+                                d="M9 21V7a3 3 0 0 1 6 0v14"
+                        ></path>
+                    </svg>
+
+                </div>
+
+                <span class="dashboard-stat-caption">
+                    Empresas
+                </span>
+
+            </div>
+
+            <div class="dashboard-stat-main">
+
+                <strong id="stat-empresas">
+                    0
+                </strong>
+
+                <span>
+                    cadastradas
+                </span>
+
+            </div>
+
+            <a
+                    href="empresas.html"
+                    class="dashboard-stat-link"
+            >
+                Ver empresas →
+
+            </a>
+
+        </article>
+
+
+        <!-- PENDENTES -->
+
+        <article class="dashboard-stat-card">
+
+            <div class="dashboard-stat-top">
+
+                <div
+                        class="
+                        dashboard-stat-icon
+                        dashboard-stat-yellow
+                    "
+                >
+
+                    <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                    >
+                        <circle
+                                cx="12"
+                                cy="12"
+                                r="9"
+                        ></circle>
+
+                        <polyline
+                                points="12 7 12 12 15 14"
+                        ></polyline>
+                    </svg>
+
+                </div>
+
+                <span class="dashboard-stat-caption">
+                    Pendências
+                </span>
+
+            </div>
+
+            <div class="dashboard-stat-main">
+
+                <strong id="stat-obrigacoes-pendentes">
+                    0
+                </strong>
+
+                <span>
+                    obrigações
+                </span>
+
+            </div>
+
+            <a
+                    href="obrigacoes.html"
+                    class="dashboard-stat-link"
+            >
+                Ver obrigações →
+
+            </a>
+
+        </article>
+
+
+        <!-- ATRASADAS -->
+
+        <article class="dashboard-stat-card">
+
+            <div class="dashboard-stat-top">
+
+                <div
+                        class="
+                        dashboard-stat-icon
+                        dashboard-stat-red
+                    "
+                >
+
+                    <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                    >
+                        <path
+                                d="
+                                M10.3 2.9
+                                1.8 17
+                                a2 2 0 0 0
+                                1.7 3h17
+                                a2 2 0 0 0
+                                1.7-3
+                                L13.7 2.9
+                                a2 2 0 0 0
+                                -3.4 0z
+                            "
+                        ></path>
+
+                        <line
+                                x1="12"
+                                y1="9"
+                                x2="12"
+                                y2="13"
+                        ></line>
+
+                        <line
+                                x1="12"
+                                y1="17"
+                                x2="12.01"
+                                y2="17"
+                        ></line>
+                    </svg>
+
+                </div>
+
+                <span class="dashboard-stat-caption">
+                    Em atraso
+                </span>
+
+            </div>
+
+            <div class="dashboard-stat-main">
+
+                <strong id="stat-obrigacoes-atrasadas">
+                    0
+                </strong>
+
+                <span>
+                    vencidas
+                </span>
+
+            </div>
+
+            <span
+                    id="dashboard-atraso-status"
+                    class="dashboard-stat-status"
+            >
+                Nenhum alerta
+            </span>
+
+        </article>
+
+
+        <!-- DOCUMENTOS -->
+
+        <article class="dashboard-stat-card">
+
+            <div class="dashboard-stat-top">
+
+                <div
+                        class="
+                        dashboard-stat-icon
+                        dashboard-stat-green
+                    "
+                >
+
+                    <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                    >
+                        <path
+                                d="
+                                M14 2H6
+                                a2 2 0 0 0-2 2
+                                v16a2 2 0 0 0 2 2
+                                h12a2 2 0 0 0 2-2
+                                V8z
+                            "
+                        ></path>
+
+                        <polyline
+                                points="14 2 14 8 20 8"
+                        ></polyline>
+                    </svg>
+
+                </div>
+
+                <span class="dashboard-stat-caption">
+                    Documentos
+                </span>
+
+            </div>
+
+            <div class="dashboard-stat-main">
+
+                <strong id="stat-documentos">
+                    0
+                </strong>
+
+                <span>
+                    arquivos
+                </span>
+
+            </div>
+
+            <a
+                    href="documentos.html"
+                    class="dashboard-stat-link"
+            >
+                Ver documentos →
+
+            </a>
+
+        </article>
+
+    </section>
+
+
+    <!-- =====================================================
+         CONTEÚDO PRINCIPAL
+    ====================================================== -->
+
+    <section class="dashboard-main-grid">
+
+        <!-- =================================================
+             PRÓXIMOS VENCIMENTOS
+        ================================================== -->
+
+        <article class="dashboard-panel dashboard-deadlines">
+
+            <div class="dashboard-panel-header">
+
+                <div>
+
+                    <span class="dashboard-panel-eyebrow">
+                        Agenda fiscal
+                    </span>
+
+                    <h2>
+                        Próximos vencimentos
+                    </h2>
+
+                    <p>
+                        Obrigações que exigem atenção nos
+                        próximos dias.
+                    </p>
+
+                </div>
+
+                <a
+                        href="obrigacoes.html"
+                        class="dashboard-panel-link"
+                >
+                    Ver todas
+                </a>
+
+            </div>
+
+
+            <div
+                    id="lista-proximos-vencimentos"
+                    class="dashboard-deadline-list"
+            >
+
+                <div class="dashboard-loading">
+                    Carregando vencimentos...
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- =================================================
+             RESUMO OPERACIONAL
+        ================================================== -->
+
+        <aside class="dashboard-panel dashboard-overview">
+
+            <div class="dashboard-panel-header">
+
+                <div>
+
+                    <span class="dashboard-panel-eyebrow">
+                        Operação
+                    </span>
+
+                    <h2>
+                        Resumo operacional
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-overview-content">
+
+                <div class="dashboard-progress-item">
+
+                    <div class="dashboard-progress-header">
+
+                        <span>
+                            Obrigações concluídas
+                        </span>
+
+                        <strong
+                                id="dashboard-percent-concluidas"
+                        >
+                            0%
+                        </strong>
+
+                    </div>
+
+                    <div class="dashboard-progress-track">
+
+                        <div
+                                id="dashboard-progress-concluidas"
+                                class="
+                                dashboard-progress-bar
+                                progress-green
+                            "
+                                style="width: 0%;"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-progress-item">
+
+                    <div class="dashboard-progress-header">
+
+                        <span>
+                            Obrigações pendentes
+                        </span>
+
+                        <strong
+                                id="dashboard-percent-pendentes"
+                        >
+                            0%
+                        </strong>
+
+                    </div>
+
+                    <div class="dashboard-progress-track">
+
+                        <div
+                                id="dashboard-progress-pendentes"
+                                class="
+                                dashboard-progress-bar
+                                progress-yellow
+                            "
+                                style="width: 0%;"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="dashboard-progress-item">
+
+                    <div class="dashboard-progress-header">
+
+                        <span>
+                            Obrigações atrasadas
+                        </span>
+
+                        <strong
+                                id="dashboard-percent-atrasadas"
+                        >
+                            0%
+                        </strong>
+
+                    </div>
+
+                    <div class="dashboard-progress-track">
+
+                        <div
+                                id="dashboard-progress-atrasadas"
+                                class="
+                                dashboard-progress-bar
+                                progress-red
+                            "
+                                style="width: 0%;"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-overview-total">
+
+                <span>
+                    Total de obrigações
+                </span>
+
+                <strong
+                        id="dashboard-total-obrigacoes"
+                >
+                    0
+                </strong>
+
+            </div>
+
+        </aside>
+
+    </section>
+
+
+    <!-- =====================================================
+         LINHA SECUNDÁRIA
+    ====================================================== -->
+
+    <section class="dashboard-secondary-grid">
+
+        <!-- DOCUMENTOS RECENTES -->
+
+        <article class="dashboard-panel">
+
+            <div class="dashboard-panel-header">
+
+                <div>
+
+                    <span class="dashboard-panel-eyebrow">
+                        Arquivos
+                    </span>
+
+                    <h2>
+                        Documentos recentes
+                    </h2>
+
+                </div>
+
+                <a
+                        href="documentos.html"
+                        class="dashboard-panel-link"
+                >
+                    Ver todos
+                </a>
+
+            </div>
+
+
+            <div
+                    id="lista-documentos-recentes"
+                    class="dashboard-documents-list"
+            >
+
+                <div class="dashboard-loading">
+                    Carregando documentos...
+                </div>
+
+            </div>
+
+        </article>
+
+
+        <!-- ATALHOS -->
+
+        <article class="dashboard-panel">
+
+            <div class="dashboard-panel-header">
+
+                <div>
+
+                    <span class="dashboard-panel-eyebrow">
+                        Acesso rápido
+                    </span>
+
+                    <h2>
+                        Ações frequentes
+                    </h2>
+
+                    <p>
+                        Acesse as principais áreas do sistema.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="dashboard-quick-actions">
+
+                <a
+                        href="empresas.html"
+                        class="dashboard-quick-action"
+                >
+
+                    <div
+                            class="
+                            dashboard-quick-icon
+                            quick-blue
+                        "
+                    >
+
+                        <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                        >
+                            <rect
+                                    x="3"
+                                    y="9"
+                                    width="18"
+                                    height="12"
+                                    rx="2"
+                            ></rect>
+
+                            <path
+                                    d="M9 21V7a3 3 0 0 1 6 0v14"
+                            ></path>
+                        </svg>
+
+                    </div>
+
+                    <div>
+                        <strong>
+                            Empresas
+                        </strong>
+
+                        <span>
+                            Gerenciar clientes
+                        </span>
+                    </div>
+
+                    <span class="dashboard-quick-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+                <a
+                        href="obrigacoes.html"
+                        class="dashboard-quick-action"
+                >
+
+                    <div
+                            class="
+                            dashboard-quick-icon
+                            quick-yellow
+                        "
+                    >
+
+                        <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                        >
+                            <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="9"
+                            ></circle>
+
+                            <polyline
+                                    points="12 7 12 12 15 14"
+                            ></polyline>
+                        </svg>
+
+                    </div>
+
+                    <div>
+                        <strong>
+                            Obrigações
+                        </strong>
+
+                        <span>
+                            Ver prazos fiscais
+                        </span>
+                    </div>
+
+                    <span class="dashboard-quick-arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+                <a
+                        href="documentos.html"
+                        class="dashboard-quick-action"
+                >
+
+                    <div
+                            class="
+                            dashboard-quick-icon
+                            quick-green
+                        "
+                    >
+
+                        <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                        >
+                            <path
+                                    d="
+                                    M14 2H6a2 2 0 0 0-2 2
+                                    v16a2 2 0 0 0 2 2h12
+                                    a2 2 0 0 0 2-2V8z
+                                "
+                            ></path>
+
+                            <polyline
+                                    points="14 2 14 8 20 8"
+                            ></polyline>
+                        </svg>
+
+                    </div>
+
+                    <div>
+                        <strong>
+                            Documentos
+                        </strong>
+
+                        <span>
+                            Enviar e consultar arquivos
+                        </span>
+                    </div>
+
+                    <span class="dashboard-quick-arrow">
+                        →
+                    </span>
+
+                </a>
+
+            </div>
+
+        </article>
+
+    </section>
+
+</div>
+
+
+<script src="auth.js"></script>
+<script src="api.js"></script>
+<script src="layout.js"></script>
+<script src="dashboard.js"></script>
+
+</body>
+
+</html>

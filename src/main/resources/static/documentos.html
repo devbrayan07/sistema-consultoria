@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Documentos - Sistema de Consultoria
+    </title>
+
+    <link
+            rel="stylesheet"
+            href="style.css"
+    >
+</head>
+
+<body>
+
+<div id="app-layout">
+
+    <!-- =====================================================
+         CABEÇALHO DA PÁGINA
+    ====================================================== -->
+
+    <section class="documentos-page-header">
+
+        <div class="documentos-page-heading">
+
+            <div class="documentos-page-icon">
+                <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                >
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <line x1="10" y1="9" x2="8" y2="9"></line>
+                </svg>
+            </div>
+
+            <div>
+                <h1 class="title">
+                    Documentos
+                </h1>
+
+                <p class="subtitle">
+                    Gerencie arquivos, comprovantes, contratos,
+                    declarações e documentos das empresas.
+                </p>
+            </div>
+
+        </div>
+
+
+        <button
+                id="btn-toggle-form"
+                type="button"
+                class="btn-primary documentos-btn-novo"
+        >
+
+            <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+            >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+
+            Enviar documento
+
+        </button>
+
+    </section>
+
+
+    <!-- =====================================================
+         INDICADORES
+    ====================================================== -->
+
+    <section class="documentos-stats">
+
+        <!-- TOTAL DE DOCUMENTOS -->
+
+        <article class="documento-stat-card">
+
+            <div class="documento-stat-icon documento-stat-primary">
+
+                <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                >
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+
+            </div>
+
+            <div class="documento-stat-content">
+
+                <span class="documento-stat-label">
+                    Total de documentos
+                </span>
+
+                <strong
+                        class="documento-stat-value"
+                        id="stat-total-documentos"
+                >
+                    0
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        <!-- EMPRESAS -->
+
+        <article class="documento-stat-card">
+
+            <div class="documento-stat-icon documento-stat-info">
+
+                <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                >
+                    <rect
+                            x="3"
+                            y="9"
+                            width="18"
+                            height="12"
+                            rx="2"
+                    ></rect>
+
+                    <path d="M9 21V7a3 3 0 0 1 6 0v14"></path>
+
+                    <line x1="9" y1="13" x2="15" y2="13"></line>
+                    <line x1="9" y1="17" x2="15" y2="17"></line>
+                </svg>
+
+            </div>
+
+            <div class="documento-stat-content">
+
+                <span class="documento-stat-label">
+                    Empresas com documentos
+                </span>
+
+                <strong
+                        class="documento-stat-value"
+                        id="stat-empresas-documentos"
+                >
+                    0
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        <!-- DOCUMENTOS DO MÊS -->
+
+        <article class="documento-stat-card">
+
+            <div class="documento-stat-icon documento-stat-success">
+
+                <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                >
+                    <rect
+                            x="3"
+                            y="4"
+                            width="18"
+                            height="18"
+                            rx="2"
+                    ></rect>
+
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+
+            </div>
+
+            <div class="documento-stat-content">
+
+                <span class="documento-stat-label">
+                    Adicionados este mês
+                </span>
+
+                <strong
+                        class="documento-stat-value"
+                        id="stat-documentos-mes"
+                >
+                    0
+                </strong>
+
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- =====================================================
+         FORMULÁRIO DE UPLOAD
+    ====================================================== -->
+
+    <section
+            id="card-form"
+            class="card documento-upload-card"
+            style="display: none;"
+    >
+
+        <div class="documento-form-header">
+
+            <div>
+
+                <h2>
+                    Enviar novo documento
+                </h2>
+
+                <p>
+                    Preencha as informações abaixo e selecione
+                    o arquivo que deseja anexar.
+                </p>
+
+            </div>
+
+            <button
+                    id="btn-fechar-form"
+                    type="button"
+                    class="documento-close-button"
+                    aria-label="Fechar formulário"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="form-documento">
+
+            <div class="form-grid documento-form-grid">
+
+                <!-- EMPRESA -->
+
+                <div class="form-group">
+
+                    <label for="idEmpresa">
+                        Empresa
+                        <span class="required">
+                            *
+                        </span>
+                    </label>
+
+                    <select
+                            id="idEmpresa"
+                            required
+                    >
+                        <option value="">
+                            Carregando empresas...
+                        </option>
+                    </select>
+
+                    <small class="form-helper">
+                        Empresa responsável pelo documento.
+                    </small>
+
+                </div>
+
+
+                <!-- TIPO -->
+
+                <div class="form-group">
+
+                    <label for="tipo">
+                        Tipo do documento
+                        <span class="required">
+                            *
+                        </span>
+                    </label>
+
+                    <select
+                            id="tipo"
+                            required
+                    >
+                        <option value="">
+                            Selecione o tipo
+                        </option>
+
+                        <option value="NOTA_FISCAL">
+                            Nota Fiscal
+                        </option>
+
+                        <option value="COMPROVANTE">
+                            Comprovante
+                        </option>
+
+                        <option value="GUIA">
+                            Guia
+                        </option>
+
+                        <option value="CONTRATO">
+                            Contrato
+                        </option>
+
+                        <option value="DECLARACAO">
+                            Declaração
+                        </option>
+
+                        <option value="OUTRO">
+                            Outro
+                        </option>
+                    </select>
+
+                </div>
+
+
+                <!-- COMPETÊNCIA -->
+
+                <div class="form-group">
+
+                    <label for="competencia">
+                        Competência
+                        <span class="required">
+                            *
+                        </span>
+                    </label>
+
+                    <input
+                            type="date"
+                            id="competencia"
+                            required
+                    >
+
+                    <small class="form-helper">
+                        Período de referência do documento.
+                    </small>
+
+                </div>
+
+
+                <!-- ARQUIVO -->
+
+                <div class="form-group documento-file-group">
+
+                    <label for="arquivo">
+                        Arquivo
+                        <span class="required">
+                            *
+                        </span>
+                    </label>
+
+                    <label
+                            for="arquivo"
+                            class="documento-upload-area"
+                    >
+
+                        <div class="documento-upload-icon">
+
+                            <svg
+                                    width="28"
+                                    height="28"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                            >
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+
+                        </div>
+
+                        <strong>
+                            Clique para selecionar um arquivo
+                        </strong>
+
+                        <span>
+                            PDF, Word, Excel, imagens e outros formatos
+                        </span>
+
+                        <span
+                                id="nome-arquivo-selecionado"
+                                class="documento-file-selected"
+                        >
+                            Nenhum arquivo selecionado
+                        </span>
+
+                    </label>
+
+                    <input
+                            type="file"
+                            id="arquivo"
+                            class="documento-file-input"
+                            required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- ALERTA -->
+
+            <div
+                    id="error-alert"
+                    class="alert-danger"
+                    style="display: none;"
+            ></div>
+
+
+            <!-- AÇÕES -->
+
+            <div class="documento-form-actions">
+
+                <button
+                        id="btn-cancelar-form"
+                        type="button"
+                        class="btn-secondary"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                        id="btn-enviar-documento"
+                        type="submit"
+                        class="btn-primary"
+                >
+
+                    <svg
+                            width="17"
+                            height="17"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                    >
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+
+                    Enviar documento
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- =====================================================
+         LISTAGEM
+    ====================================================== -->
+
+    <section class="card documento-list-card">
+
+        <div class="documento-list-header">
+
+            <div>
+
+                <h2>
+                    Documentos cadastrados
+                </h2>
+
+                <p>
+                    Consulte e acesse os arquivos cadastrados no sistema.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- FILTROS -->
+
+        <div class="documentos-toolbar">
+
+            <!-- PESQUISA -->
+
+            <div class="documentos-search">
+
+                <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                >
+                    <circle
+                            cx="11"
+                            cy="11"
+                            r="8"
+                    ></circle>
+
+                    <line
+                            x1="21"
+                            y1="21"
+                            x2="16.65"
+                            y2="16.65"
+                    ></line>
+                </svg>
+
+                <input
+                        type="text"
+                        id="filtro-documentos"
+                        placeholder="Pesquisar por arquivo ou empresa..."
+                        autocomplete="off"
+                >
+
+            </div>
+
+
+            <!-- EMPRESA -->
+
+            <select
+                    id="filtro-empresa"
+                    class="documentos-filter"
+            >
+                <option value="">
+                    Todas as empresas
+                </option>
+            </select>
+
+
+            <!-- TIPO -->
+
+            <select
+                    id="filtro-tipo"
+                    class="documentos-filter"
+            >
+                <option value="">
+                    Todos os tipos
+                </option>
+
+                <option value="NOTA_FISCAL">
+                    Nota Fiscal
+                </option>
+
+                <option value="COMPROVANTE">
+                    Comprovante
+                </option>
+
+                <option value="GUIA">
+                    Guia
+                </option>
+
+                <option value="CONTRATO">
+                    Contrato
+                </option>
+
+                <option value="DECLARACAO">
+                    Declaração
+                </option>
+
+                <option value="OUTRO">
+                    Outro
+                </option>
+            </select>
+
+        </div>
+
+
+        <!-- TABELA -->
+
+        <div class="table-responsive documentos-table-wrapper">
+
+            <table class="documentos-table">
+
+                <thead>
+
+                <tr>
+
+                    <th>
+                        Arquivo
+                    </th>
+
+                    <th>
+                        Empresa
+                    </th>
+
+                    <th>
+                        Tipo
+                    </th>
+
+                    <th>
+                        Competência
+                    </th>
+
+                    <th>
+                        Enviado por
+                    </th>
+
+                    <th class="documentos-actions-column">
+                        Ações
+                    </th>
+
+                </tr>
+
+                </thead>
+
+
+                <tbody id="lista-documentos">
+
+                <tr>
+
+                    <td
+                            colspan="6"
+                            class="documentos-loading"
+                    >
+                        Carregando documentos...
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- RODAPÉ DA LISTA -->
+
+        <div class="documentos-list-footer">
+
+            <span id="documentos-contador">
+                0 documentos encontrados
+            </span>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script src="auth.js"></script>
+<script src="api.js"></script>
+<script src="layout.js"></script>
+<script src="documentos.js"></script>
+
+</body>
+
+</html>

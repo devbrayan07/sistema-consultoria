@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Obrigações - Sistema de Consultoria
+    </title>
+
+    <link
+            rel="stylesheet"
+            href="style.css"
+    >
+</head>
+
+<body>
+
+<div id="app-layout">
+
+    <!-- =====================================================
+         CABEÇALHO
+    ====================================================== -->
+
+    <section class="obrigacoes-page-header">
+
+        <div class="obrigacoes-page-heading">
+
+            <div class="obrigacoes-page-icon">
+
+                <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                >
+                    <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                    ></circle>
+
+                    <polyline
+                            points="12 7 12 12 15 14"
+                    ></polyline>
+                </svg>
+
+            </div>
+
+            <div>
+
+                <h1 class="title">
+                    Obrigações
+                </h1>
+
+                <p class="subtitle">
+                    Acompanhe vencimentos, pagamentos e
+                    obrigações fiscais das empresas.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <button
+                id="btn-toggle-form"
+                type="button"
+                class="btn-primary obrigacoes-btn-nova"
+                style="display: none;"
+        >
+
+            <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+            >
+                <line
+                        x1="12"
+                        y1="5"
+                        x2="12"
+                        y2="19"
+                ></line>
+
+                <line
+                        x1="5"
+                        y1="12"
+                        x2="19"
+                        y2="12"
+                ></line>
+            </svg>
+
+            Nova obrigação
+
+        </button>
+
+    </section>
+
+
+    <!-- =====================================================
+         INDICADORES
+    ====================================================== -->
+
+    <section class="obrigacoes-stats">
+
+        <article class="obrigacao-stat-card">
+
+            <div
+                    class="
+                        obrigacao-stat-icon
+                        obrigacao-stat-blue
+                    "
+            >
+                <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                >
+                    <path
+                            d="M9 11l3 3L22 4"
+                    ></path>
+
+                    <path
+                            d="
+                                M21 12v7a2 2 0 0 1-2 2H5
+                                a2 2 0 0 1-2-2V5
+                                a2 2 0 0 1 2-2h11
+                            "
+                    ></path>
+                </svg>
+            </div>
+
+            <div>
+
+                <span>
+                    Total de obrigações
+                </span>
+
+                <strong id="stat-total-obrigacoes">
+                    0
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        <article class="obrigacao-stat-card">
+
+            <div
+                    class="
+                        obrigacao-stat-icon
+                        obrigacao-stat-yellow
+                    "
+            >
+                <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                >
+                    <circle
+                            cx="12"
+                            cy="12"
+                            r="9"
+                    ></circle>
+
+                    <polyline
+                            points="12 7 12 12 15 14"
+                    ></polyline>
+                </svg>
+            </div>
+
+            <div>
+
+                <span>
+                    Pendentes
+                </span>
+
+                <strong id="stat-pendentes">
+                    0
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        <article class="obrigacao-stat-card">
+
+            <div
+                    class="
+                        obrigacao-stat-icon
+                        obrigacao-stat-green
+                    "
+            >
+                <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                >
+                    <path
+                            d="M20 6L9 17l-5-5"
+                    ></path>
+                </svg>
+            </div>
+
+            <div>
+
+                <span>
+                    Concluídas
+                </span>
+
+                <strong id="stat-concluidas">
+                    0
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        <article class="obrigacao-stat-card">
+
+            <div
+                    class="
+                        obrigacao-stat-icon
+                        obrigacao-stat-red
+                    "
+            >
+                <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                >
+                    <path
+                            d="
+                                M10.3 2.9
+                                1.8 17
+                                a2 2 0 0 0
+                                1.7 3h17
+                                a2 2 0 0 0
+                                1.7-3
+                                L13.7 2.9
+                                a2 2 0 0 0
+                                -3.4 0z
+                            "
+                    ></path>
+
+                    <line
+                            x1="12"
+                            y1="9"
+                            x2="12"
+                            y2="13"
+                    ></line>
+
+                    <line
+                            x1="12"
+                            y1="17"
+                            x2="12.01"
+                            y2="17"
+                    ></line>
+                </svg>
+            </div>
+
+            <div>
+
+                <span>
+                    Em atraso
+                </span>
+
+                <strong id="stat-atrasadas">
+                    0
+                </strong>
+
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- =====================================================
+         FORMULÁRIO
+    ====================================================== -->
+
+    <section
+            id="card-form"
+            class="card obrigacao-form-card"
+            style="display: none;"
+    >
+
+        <div class="obrigacao-form-header">
+
+            <div>
+
+                <h2>
+                    Cadastrar nova obrigação
+                </h2>
+
+                <p>
+                    Informe os dados fiscais, valores e
+                    vencimento da obrigação.
+                </p>
+
+            </div>
+
+
+            <button
+                    id="btn-fechar-form"
+                    type="button"
+                    class="obrigacao-close-button"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="form-obrigacao">
+
+            <div class="obrigacao-form-grid">
+
+                <!-- EMPRESA -->
+
+                <div class="form-group">
+
+                    <label for="idEmpresa">
+                        Empresa
+
+                        <span class="required">
+                            *
+                        </span>
+                    </label>
+
+                    <select
+                            id="idEmpresa"
+                            required
+                    >
+
+                        <option value="">
+                            Carregando empresas...
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- TIPO -->
+
+                <div class="form-group">
+
+                    <label for="tipo">
+                        Tipo da obrigação
+
+                        <span class="required">
+                            *
+                        </span>
+                    </label>
+
+                    <select
+                            id="tipo"
+                            required
+                    >
+
+                        <option value="">
+                            Selecione o tipo
+                        </option>
+
+                        <option value="DAS">
+                            DAS
+                        </option>
+
+                        <option value="DARF">
+                            DARF
+                        </option>
+
+                        <option value="DEFIS">
+                            DEFIS
+                        </option>
+
+                        <option value="FOLHA">
+                            Folha de pagamento
+                        </option>
+
+                        <option value="ISS">
+                            ISS
+                        </option>
+
+                        <option value="OUTRO">
+                            Outro
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- COMPETÊNCIA -->
+
+                <div class="form-group">
+
+                    <label for="competencia">
+                        Competência
+
+                        <span class="required">
+                            *
+                        </span>
+                    </label>
+
+                    <input
+                            type="date"
+                            id="competencia"
+                            required
+                    >
+
+                </div>
+
+
+                <!-- VENCIMENTO -->
+
+                <div class="form-group">
+
+                    <label for="dataVencimento">
+                        Data de vencimento
+
+                        <span class="required">
+                            *
+                        </span>
+                    </label>
+
+                    <input
+                            type="date"
+                            id="dataVencimento"
+                            required
+                    >
+
+                </div>
+
+
+                <!-- VALOR -->
+
+                <div class="form-group">
+
+                    <label for="valor">
+                        Valor da obrigação
+                    </label>
+
+                    <div class="obrigacao-money-field">
+
+                        <span>
+                            R$
+                        </span>
+
+                        <input
+                                type="number"
+                                id="valor"
+                                min="0"
+                                step="0.01"
+                                placeholder="0,00"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- HONORÁRIO -->
+
+                <div class="form-group">
+
+                    <label for="honorario">
+                        Honorário
+                    </label>
+
+                    <div class="obrigacao-money-field">
+
+                        <span>
+                            R$
+                        </span>
+
+                        <input
+                                type="number"
+                                id="honorario"
+                                min="0"
+                                step="0.01"
+                                placeholder="0,00"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="form-group obrigacao-status-field">
+
+                    <label for="status">
+                        Status
+
+                        <span class="required">
+                            *
+                        </span>
+                    </label>
+
+                    <select
+                            id="status"
+                            required
+                    >
+
+                        <option value="PENDENTE">
+                            Pendente
+                        </option>
+
+                        <option value="PAGA">
+                            Paga
+                        </option>
+
+                        <option value="ATRASADA">
+                            Atrasada
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div
+                    id="error-alert"
+                    class="alert-danger"
+                    style="display: none;"
+            ></div>
+
+
+            <div class="obrigacao-form-actions">
+
+                <button
+                        id="btn-cancelar-form"
+                        type="button"
+                        class="btn-secondary"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                        id="btn-salvar-obrigacao"
+                        type="submit"
+                        class="btn-primary"
+                >
+                    Salvar obrigação
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    <!-- =====================================================
+         LISTAGEM
+    ====================================================== -->
+
+    <section class="card obrigacoes-list-card">
+
+        <div class="obrigacoes-list-header">
+
+            <div>
+
+                <h2>
+                    Obrigações cadastradas
+                </h2>
+
+                <p>
+                    Consulte prazos, valores e situação
+                    fiscal das empresas.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- FILTROS -->
+
+        <div class="obrigacoes-toolbar">
+
+            <div class="obrigacoes-search">
+
+                <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                >
+                    <circle
+                            cx="11"
+                            cy="11"
+                            r="8"
+                    ></circle>
+
+                    <line
+                            x1="21"
+                            y1="21"
+                            x2="16.65"
+                            y2="16.65"
+                    ></line>
+                </svg>
+
+                <input
+                        type="text"
+                        id="filtro-obrigacoes"
+                        placeholder="Pesquisar por empresa ou tipo..."
+                        autocomplete="off"
+                >
+
+            </div>
+
+
+            <select
+                    id="filtro-empresa"
+                    class="obrigacoes-filter"
+            >
+
+                <option value="">
+                    Todas as empresas
+                </option>
+
+            </select>
+
+
+            <select
+                    id="filtro-status"
+                    class="obrigacoes-filter"
+            >
+
+                <option value="">
+                    Todos os status
+                </option>
+
+                <option value="PENDENTE">
+                    Pendentes
+                </option>
+
+                <option value="PAGA">
+                    Pagas
+                </option>
+
+                <option value="ATRASADA">
+                    Atrasadas
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- TABELA -->
+
+        <div class="table-responsive obrigacoes-table-wrapper">
+
+            <table class="obrigacoes-table">
+
+                <thead>
+
+                <tr>
+
+                    <th>
+                        Obrigação
+                    </th>
+
+                    <th>
+                        Empresa
+                    </th>
+
+                    <th>
+                        Competência
+                    </th>
+
+                    <th>
+                        Vencimento
+                    </th>
+
+                    <th>
+                        Valor
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                </tr>
+
+                </thead>
+
+
+                <tbody id="lista-obrigacoes">
+
+                <tr>
+
+                    <td
+                            colspan="6"
+                            class="obrigacoes-loading"
+                    >
+                        Carregando obrigações...
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="obrigacoes-list-footer">
+
+            <span id="obrigacoes-contador">
+                0 obrigações encontradas
+            </span>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script src="auth.js"></script>
+<script src="api.js"></script>
+<script src="layout.js"></script>
+<script src="obrigacoes.js"></script>
+
+</body>
+
+</html>

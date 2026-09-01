@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login - Consultoria ERP</title>
+
+    <link
+            rel="stylesheet"
+            href="style.css"
+    >
+</head>
+
+<body class="login-page">
+
+<div class="login-shell">
+
+    <!-- =====================================================
+         LADO ESQUERDO
+    ====================================================== -->
+
+    <section class="login-brand-panel">
+
+        <div class="login-brand-content">
+
+            <div class="login-brand-logo">
+
+                <div class="login-brand-logo-icon">
+                    C
+                </div>
+
+                <div>
+                    <strong>Consultoria ERP</strong>
+                    <span>Gestão empresarial integrada</span>
+                </div>
+
+            </div>
+
+
+            <div class="login-brand-copy">
+
+                <span class="login-brand-eyebrow">
+                    Plataforma de gestão
+                </span>
+
+                <h1>
+                    Controle fiscal, empresarial e documental em um só lugar.
+                </h1>
+
+                <p>
+                    Centralize empresas, obrigações fiscais, documentos,
+                    relatórios e informações dos seus clientes em uma
+                    plataforma moderna e segura.
+                </p>
+
+            </div>
+
+
+            <div class="login-benefits">
+
+                <div class="login-benefit-item">
+
+                    <div class="login-benefit-icon">
+                        ✓
+                    </div>
+
+                    <div>
+                        <strong>Gestão centralizada</strong>
+
+                        <span>
+                            Acompanhe empresas, obrigações e documentos
+                            em uma única plataforma.
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="login-benefit-item">
+
+                    <div class="login-benefit-icon">
+                        ✓
+                    </div>
+
+                    <div>
+                        <strong>Controle de vencimentos</strong>
+
+                        <span>
+                            Visualize prazos fiscais e mantenha suas
+                            demandas sempre organizadas.
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="login-benefit-item">
+
+                    <div class="login-benefit-icon">
+                        ✓
+                    </div>
+
+                    <div>
+                        <strong>Acesso seguro</strong>
+
+                        <span>
+                            Perfis e permissões diferentes para clientes,
+                            contadores e administradores.
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="login-brand-footer">
+                <span>Consultoria ERP</span>
+                <span>•</span>
+                <span>Sistema de gestão empresarial</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         LADO DIREITO
+    ====================================================== -->
+
+    <main class="login-form-panel">
+
+        <div class="login-form-wrapper">
+
+            <div class="login-mobile-brand">
+
+                <div class="login-brand-logo-icon">
+                    C
+                </div>
+
+                <div>
+                    <strong>Consultoria ERP</strong>
+                    <span>Gestão empresarial integrada</span>
+                </div>
+
+            </div>
+
+
+            <div class="login-form-header">
+
+                <span class="login-form-badge">
+                    Área de acesso
+                </span>
+
+                <h2>
+                    Bem-vindo de volta
+                </h2>
+
+                <p>
+                    Entre com suas credenciais para acessar o sistema.
+                </p>
+
+            </div>
+
+
+            <div
+                    id="error-alert"
+                    class="alert-error login-alert"
+                    style="display: none;"
+            ></div>
+
+
+            <form
+                    id="form-login"
+                    class="login-form"
+            >
+
+                <div class="login-field">
+
+                    <label for="email">
+                        E-mail
+                    </label>
+
+                    <div class="login-input-wrapper">
+
+                        <div class="login-input-icon">
+
+                            <svg
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                            >
+                                <rect
+                                        x="3"
+                                        y="5"
+                                        width="18"
+                                        height="14"
+                                        rx="2"
+                                ></rect>
+
+                                <polyline
+                                        points="3,7 12,13 21,7"
+                                ></polyline>
+                            </svg>
+
+                        </div>
+
+                        <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                required
+                                autocomplete="email"
+                                placeholder="seu.email@exemplo.com"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="login-field">
+
+                    <div class="login-field-label-row">
+
+                        <label for="senha">
+                            Senha
+                        </label>
+
+                    </div>
+
+
+                    <div class="login-input-wrapper">
+
+                        <div class="login-input-icon">
+
+                            <svg
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                            >
+                                <rect
+                                        x="5"
+                                        y="11"
+                                        width="14"
+                                        height="10"
+                                        rx="2"
+                                ></rect>
+
+                                <path
+                                        d="M8 11V7a4 4 0 0 1 8 0v4"
+                                ></path>
+                            </svg>
+
+                        </div>
+
+
+                        <input
+                                type="password"
+                                id="senha"
+                                name="senha"
+                                required
+                                autocomplete="current-password"
+                                placeholder="Digite sua senha"
+                        >
+
+
+                        <button
+                                type="button"
+                                id="btn-toggle-senha"
+                                class="login-password-toggle"
+                                aria-label="Mostrar senha"
+                                title="Mostrar senha"
+                        >
+
+                            <svg
+                                    id="icone-senha"
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                            >
+                                <path
+                                        d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
+                                ></path>
+
+                                <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="3"
+                                ></circle>
+                            </svg>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                        type="submit"
+                        id="btn-login"
+                        class="login-submit-button"
+                >
+                    <span id="btn-login-text">
+                        Entrar no sistema
+                    </span>
+
+                    <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                    >
+                        <line
+                                x1="5"
+                                y1="12"
+                                x2="19"
+                                y2="12"
+                        ></line>
+
+                        <polyline
+                                points="12 5 19 12 12 19"
+                        ></polyline>
+                    </svg>
+                </button>
+
+            </form>
+
+
+            <div class="login-divider">
+                <span></span>
+                <p>ou</p>
+                <span></span>
+            </div>
+
+
+            <div class="login-register">
+
+                <p>
+                    Ainda não possui uma conta?
+                </p>
+
+                <a
+                        href="cadastro.html"
+                        class="login-register-link"
+                >
+                    Criar conta
+                </a>
+
+            </div>
+
+
+            <div class="login-security-note">
+
+                <svg
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                >
+                    <path
+                            d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                    ></path>
+                </svg>
+
+                <span>
+                    Seus dados são protegidos por autenticação segura.
+                </span>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script src="auth.js"></script>
+<script src="api.js"></script>
+<script src="login.js"></script>
+
+<script>
+    if (
+        typeof auth !== 'undefined'
+        &&
+        auth.getToken()
+    ) {
+        window.location.href = 'dashboard.html';
+    }
+</script>
+
+</body>
+
+</html>
