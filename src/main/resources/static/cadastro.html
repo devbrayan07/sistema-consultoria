@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Criar conta | Sistema de Consultoria</title>
+
+    <link
+            rel="stylesheet"
+            href="style.css"
+    >
+</head>
+
+<body class="cadastro-body">
+
+<main class="cadastro-page">
+
+    <section class="cadastro-shell">
+
+        <!-- ======================================================
+             PAINEL DE APRESENTAÇÃO
+        ======================================================= -->
+
+        <aside class="cadastro-brand-panel">
+
+            <div class="cadastro-brand-content">
+
+                <div class="cadastro-brand-badge">
+                    SC
+                </div>
+
+                <span class="cadastro-brand-eyebrow">
+                    Sistema de Consultoria
+                </span>
+
+                <h1>
+                    Organize sua empresa
+                    em um só lugar.
+                </h1>
+
+                <p>
+                    Acompanhe obrigações, documentos e informações
+                    importantes da sua empresa com mais clareza
+                    e segurança.
+                </p>
+
+                <div class="cadastro-feature-list">
+
+                    <div class="cadastro-feature">
+
+                        <div class="cadastro-feature-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <strong>Obrigações organizadas</strong>
+
+                            <span>
+                                Acompanhe prazos, pagamentos e pendências.
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="cadastro-feature">
+
+                        <div class="cadastro-feature-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <strong>Documentos centralizados</strong>
+
+                            <span>
+                                Consulte arquivos enviados pela sua contabilidade.
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="cadastro-feature">
+
+                        <div class="cadastro-feature-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <strong>Acesso seguro</strong>
+
+                            <span>
+                                Seus dados são protegidos por autenticação individual.
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- ======================================================
+             FORMULÁRIO
+        ======================================================= -->
+
+        <section class="cadastro-form-panel">
+
+            <div class="cadastro-form-container">
+
+                <div class="cadastro-mobile-brand">
+                    <div class="cadastro-brand-badge">
+                        SC
+                    </div>
+
+                    <span>
+                        Sistema de Consultoria
+                    </span>
+                </div>
+
+
+                <header class="cadastro-header">
+
+                    <span class="cadastro-eyebrow">
+                        Comece agora
+                    </span>
+
+                    <h2>
+                        Crie sua conta
+                    </h2>
+
+                    <p>
+                        Preencha seus dados para acessar o sistema.
+                    </p>
+
+                </header>
+
+
+                <div
+                        id="cadastro-alert"
+                        class="cadastro-alert cadastro-hidden"
+                ></div>
+
+
+                <form
+                        id="form-cadastro"
+                        class="cadastro-form"
+                        autocomplete="off"
+                >
+
+                    <!-- NOME -->
+
+                    <div class="cadastro-field">
+
+                        <label for="cadastro-nome">
+                            Nome completo
+                        </label>
+
+                        <div class="cadastro-input-wrapper">
+
+                            <span class="cadastro-input-icon">
+                                👤
+                            </span>
+
+                            <input
+                                    type="text"
+                                    id="cadastro-nome"
+                                    maxlength="120"
+                                    placeholder="Digite seu nome completo"
+                                    required
+                            >
+
+                        </div>
+
+                        <small
+                                id="cadastro-nome-error"
+                                class="cadastro-field-error"
+                        ></small>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="cadastro-field">
+
+                        <label for="cadastro-email">
+                            E-mail
+                        </label>
+
+                        <div class="cadastro-input-wrapper">
+
+                            <span class="cadastro-input-icon">
+                                @
+                            </span>
+
+                            <input
+                                    type="email"
+                                    id="cadastro-email"
+                                    maxlength="120"
+                                    placeholder="voce@email.com"
+                                    autocomplete="email"
+                                    required
+                            >
+
+                        </div>
+
+                        <small
+                                id="cadastro-email-error"
+                                class="cadastro-field-error"
+                        ></small>
+
+                    </div>
+
+
+                    <!-- SENHA -->
+
+                    <div class="cadastro-field">
+
+                        <label for="cadastro-senha">
+                            Senha
+                        </label>
+
+                        <div class="cadastro-input-wrapper">
+
+                            <span class="cadastro-input-icon">
+                                🔒
+                            </span>
+
+                            <input
+                                    type="password"
+                                    id="cadastro-senha"
+                                    placeholder="Crie uma senha"
+                                    autocomplete="new-password"
+                                    required
+                            >
+
+                            <button
+                                    type="button"
+                                    class="cadastro-password-toggle"
+                                    data-target="cadastro-senha"
+                                    aria-label="Mostrar senha"
+                            >
+                                👁
+                            </button>
+
+                        </div>
+
+
+                        <div class="cadastro-password-meter">
+
+                            <div
+                                    id="cadastro-password-progress"
+                                    class="cadastro-password-progress"
+                            ></div>
+
+                        </div>
+
+
+                        <div class="cadastro-password-info">
+
+                            <span id="cadastro-password-strength">
+                                Use pelo menos 8 caracteres.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CONFIRMAÇÃO -->
+
+                    <div class="cadastro-field">
+
+                        <label for="cadastro-confirmar-senha">
+                            Confirmar senha
+                        </label>
+
+                        <div class="cadastro-input-wrapper">
+
+                            <span class="cadastro-input-icon">
+                                🔒
+                            </span>
+
+                            <input
+                                    type="password"
+                                    id="cadastro-confirmar-senha"
+                                    placeholder="Digite a senha novamente"
+                                    autocomplete="new-password"
+                                    required
+                            >
+
+                            <button
+                                    type="button"
+                                    class="cadastro-password-toggle"
+                                    data-target="cadastro-confirmar-senha"
+                                    aria-label="Mostrar senha"
+                            >
+                                👁
+                            </button>
+
+                        </div>
+
+                        <small
+                                id="cadastro-confirmar-error"
+                                class="cadastro-field-error"
+                        ></small>
+
+                    </div>
+
+
+                    <!-- TERMOS -->
+
+                    <label class="cadastro-checkbox">
+
+                        <input
+                                type="checkbox"
+                                id="cadastro-termos"
+                                required
+                        >
+
+                        <span>
+                            Concordo com os termos de uso
+                            e com a política de privacidade.
+                        </span>
+
+                    </label>
+
+
+                    <!-- BOTÃO -->
+
+                    <button
+                            type="submit"
+                            id="btn-criar-conta"
+                            class="cadastro-submit-button"
+                    >
+                        <span id="cadastro-submit-text">
+                            Criar minha conta
+                        </span>
+
+                        <span
+                                id="cadastro-submit-loading"
+                                class="cadastro-spinner cadastro-hidden"
+                        ></span>
+                    </button>
+
+
+                </form>
+
+
+                <div class="cadastro-divider">
+
+                    <span></span>
+
+                    <p>
+                        já possui acesso?
+                    </p>
+
+                    <span></span>
+
+                </div>
+
+
+                <a
+                        href="index.html"
+                        class="cadastro-login-link"
+                >
+                    Entrar na minha conta
+                </a>
+
+
+                <footer class="cadastro-footer">
+
+                    <span>
+                        © Sistema de Consultoria
+                    </span>
+
+                    <span>
+                        Ambiente seguro
+                    </span>
+
+                </footer>
+
+            </div>
+
+        </section>
+
+    </section>
+
+</main>
+
+
+<script src="cadastro.js"></script>
+
+</body>
+
+</html>
