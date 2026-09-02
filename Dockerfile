@@ -1,30 +1,20 @@
-# Etapa 1: compila o projeto
-FROM maven:3.9.11-eclipse-temurin-26 AS build
+# Etapa 1: build com Java 26
+FROM eclipse-temurin:26-jdk AS build
 
 WORKDIR /app
 
-# Copia primeiro o pom para aproveitar cache de dependências
-COPY pom.xml .
+COPY . .
 
-RUN mvn dependency:go-offline -B
+RUN chmod +x mvnw
+RUN ./mvnw clean package -DskipTests
 
-# Copia o código-fonte
-COPY src ./src
-
-# Gera o .jar
-RUN mvn clean package -DskipTests -B
-
-
-# Etapa 2: imagem final mais enxuta
+# Etapa 2: runtime
 FROM eclipse-temurin:26-jre
 
 WORKDIR /app
 
-# Copia o jar gerado na etapa de build
 COPY --from=build /app/target/*.jar app.jar
 
-# Railway injeta a porta pela variável PORT.
-# Seu Spring já deve usar server.port=${PORT:8082}
 EXPOSE 8082
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
