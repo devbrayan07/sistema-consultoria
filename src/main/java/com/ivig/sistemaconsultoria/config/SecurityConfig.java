@@ -152,6 +152,7 @@ public class SecurityConfig {
                                 "/obrigacoes.html",
                                 "/documentos.html",
                                 "/usuarios.html",
+                                "/pagamentos.html",
                                 "/cadastro.html",
                                 "/style.css",
                                 "/*.js",
@@ -497,6 +498,15 @@ public class SecurityConfig {
                          * responsabilidade dos Controllers/Services.
                          * =================================================
                          */
+
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/dev/pagamentos/**"
+                        )
+                        .hasAnyRole(
+                                "CONTADOR",
+                                "ADMINISTRADOR"
+                        )
 
                         .requestMatchers(
                                 HttpMethod.POST,

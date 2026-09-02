@@ -684,4 +684,31 @@ public class PagamentoService {
 
                 .build();
     }
+
+
+    @Transactional
+    public PagamentoResponseDTO simularAprovacao(Integer idPagamento) {
+        Pagamento pagamento = pagamentoRepository.findById(idPagamento).orElseThrow(() ->
+                new IllegalArgumentException("Pagamento não encontrado."));
+
+
+        if (pagamento.getStatus() == StatusPagamento.PAGO) {
+            throw new IllegalArgumentException("Este pagamento já está pago.");
+        }
+
+        if (pagamento.getStatus() == StatusPagamento.CANCELADO) {
+            throw new IllegalStateException("Um pagamento cancelado não pode ser aprovado.");
+        }
+
+        if (pagamento.getStatus() == StatusPagamento.ESTORNADO) {
+            throw new IllegalStateException("Um pagamento estornado não pode ser aprovado.");
+        }
+
+        pagamento.setStatus(StatusPagamento.PAGO);
+        pagamento.setDataPagamento(LocalDateTime.now());
+
+        Pagamento pagamentoSalvo = pagamentoRepository.save(pagamento);
+
+        return converterParaDTO(pagamentoSalvo);
+    }
 }

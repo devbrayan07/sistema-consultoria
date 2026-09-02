@@ -1,3 +1,12 @@
+let pagamentoPixAtual = null;
+
+
+/*
+ * =============================================================
+ * INICIALIZAÇÃO
+ * =============================================================
+ */
+
 document.addEventListener(
     'DOMContentLoaded',
     () => {
@@ -112,8 +121,7 @@ document.addEventListener(
 
 
         /*
-         * Compatibilidade temporária
-         * com perfis antigos.
+         * Compatibilidade com perfis antigos.
          */
 
         if (
@@ -247,6 +255,52 @@ document.addEventListener(
         let obrigacoesCarregadas = [];
         let empresasCarregadas = [];
 
+        let idObrigacaoEdicao = null;
+
+
+        /*
+         * =====================================================
+         * MODAL PIX
+         * =====================================================
+         */
+
+        document
+            .getElementById(
+                'btn-fechar-modal-pix'
+            )
+            ?.addEventListener(
+                'click',
+                fecharModalPix
+            );
+
+
+        document
+            .getElementById(
+                'btn-copiar-pix-obrigacao'
+            )
+            ?.addEventListener(
+                'click',
+                copiarPixObrigacao
+            );
+
+
+        document
+            .getElementById(
+                'modal-pix-backdrop'
+            )
+            ?.addEventListener(
+                'click',
+                event => {
+
+                    if (
+                        event.target ===
+                        event.currentTarget
+                    ) {
+                        fecharModalPix();
+                    }
+                }
+            );
+
 
         /*
          * =====================================================
@@ -257,7 +311,7 @@ document.addEventListener(
         function aplicarPermissoesObrigacoes() {
 
             /*
-             * Somente CONTADOR e ADMINISTRADOR
+             * CONTADOR e ADMINISTRADOR
              * podem cadastrar obrigações.
              */
 
@@ -281,8 +335,7 @@ document.addEventListener(
 
 
             /*
-             * USUARIO ou qualquer perfil não
-             * reconhecido fica somente em consulta.
+             * USUARIO fica somente em consulta/pagamento.
              */
 
             if (btnToggle) {
@@ -358,6 +411,30 @@ document.addEventListener(
             form?.reset();
 
 
+            idObrigacaoEdicao =
+                null;
+
+
+            const titulo =
+                document.querySelector(
+                    '.obrigacao-form-header h2'
+                );
+
+
+            if (titulo) {
+
+                titulo.textContent =
+                    'Nova obrigação';
+            }
+
+
+            if (btnSalvar) {
+
+                btnSalvar.textContent =
+                    'Salvar obrigação';
+            }
+
+
             ocultarErro();
 
 
@@ -367,7 +444,13 @@ document.addEventListener(
 
         btnToggle?.addEventListener(
             'click',
-            abrirFormulario
+            () => {
+
+                idObrigacaoEdicao =
+                    null;
+
+                abrirFormulario();
+            }
         );
 
 
@@ -530,7 +613,7 @@ document.addEventListener(
                 <tr>
 
                     <td
-                        colspan="6"
+                        colspan="7"
                         class="obrigacoes-loading"
                     >
                         Carregando obrigações...
@@ -578,7 +661,7 @@ document.addEventListener(
                     <tr>
 
                         <td
-                            colspan="6"
+                            colspan="7"
                             class="
                                 obrigacoes-loading
                                 obrigacoes-load-error
@@ -773,7 +856,7 @@ document.addEventListener(
                     <tr>
 
                         <td
-                            colspan="6"
+                            colspan="7"
                             class="obrigacoes-empty"
                         >
 
@@ -810,6 +893,10 @@ document.addEventListener(
             }
 
 
+            /*
+             * Primeiro cria as linhas.
+             */
+
             lista.innerHTML =
                 obrigacoes
                     .map(
@@ -821,9 +908,78 @@ document.addEventListener(
                     .join('');
 
 
+            /*
+             * Somente DEPOIS que os botões existem
+             * registramos os eventos.
+             */
+
+            registrarEventosTabela();
+
+
             atualizarContador(
                 obrigacoes.length
             );
+        }
+
+
+        function registrarEventosTabela() {
+
+            /*
+             * Botões PIX
+             */
+
+            lista
+                ?.querySelectorAll(
+                    '[data-pagar-obrigacao]'
+                )
+                .forEach(
+                    botao => {
+
+                        botao.addEventListener(
+                            'click',
+                            () => {
+
+                                const idObrigacao =
+                                    Number(
+                                        botao.dataset
+                                            .pagarObrigacao
+                                    );
+
+
+                                criarPagamentoPix(
+                                    idObrigacao
+                                );
+                            }
+                        );
+                    }
+                );
+
+
+            /*
+             * Botões editar.
+             */
+
+            lista
+                ?.querySelectorAll(
+                    '[data-editar-obrigacao]'
+                )
+                .forEach(
+                    botao => {
+
+                        botao.addEventListener(
+                            'click',
+                            () => {
+
+                                editarObrigacao(
+                                    Number(
+                                        botao.dataset
+                                            .editarObrigacao
+                                    )
+                                );
+                            }
+                        );
+                    }
+                );
         }
 
 
@@ -875,6 +1031,17 @@ document.addEventListener(
                 );
 
 
+            /*
+             * Objeto usado para verificar se
+             * a obrigação pode gerar pagamento.
+             */
+
+            const obrigacaoComStatusReal = {
+                ...obrigacao,
+                status: statusReal
+            };
+
+
             return `
                 <tr
                     class="${
@@ -884,6 +1051,7 @@ document.addEventListener(
             }"
                 >
 
+                    <!-- OBRIGAÇÃO -->
                     <td>
 
                         <div class="obrigacao-main-cell">
@@ -922,6 +1090,7 @@ document.addEventListener(
                     </td>
 
 
+                    <!-- EMPRESA -->
                     <td>
 
                         <div class="obrigacao-company">
@@ -945,13 +1114,17 @@ document.addEventListener(
                     </td>
 
 
+                    <!-- COMPETÊNCIA -->
                     <td>
+
                         ${formatarCompetencia(
                 obrigacao.competencia
             )}
+
                     </td>
 
 
+                    <!-- VENCIMENTO -->
                     <td>
 
                         <div class="obrigacao-vencimento">
@@ -981,6 +1154,7 @@ document.addEventListener(
                     </td>
 
 
+                    <!-- VALOR -->
                     <td>
 
                         <strong class="obrigacao-value">
@@ -994,6 +1168,7 @@ document.addEventListener(
                     </td>
 
 
+                    <!-- STATUS -->
                     <td>
 
                         <span
@@ -1008,6 +1183,72 @@ document.addEventListener(
                 statusReal
             )}
                         </span>
+
+                    </td>
+
+
+                    <!-- AÇÕES -->
+                    <td>
+
+                        <div class="obrigacao-acoes">
+
+                            ${
+                podePagarObrigacao(
+                    obrigacaoComStatusReal
+                )
+                    ? `
+                                        <button
+                                            type="button"
+                                            class="
+                                                btn-pagar-pix
+                                            "
+                                            data-pagar-obrigacao="${
+                        obrigacao.id
+                    }"
+                                        >
+                                            Pagar com PIX
+                                        </button>
+                                    `
+                    : ''
+            }
+
+
+                            ${
+                podeCadastrarObrigacao
+                    ? `
+                                        <button
+                                            type="button"
+                                            class="
+                                                btn-editar-obrigacao
+                                            "
+                                            data-editar-obrigacao="${
+                        obrigacao.id
+                    }"
+                                        >
+                                            Editar
+                                        </button>
+                                    `
+                    : ''
+            }
+
+
+                            ${
+                !podePagarObrigacao(
+                    obrigacaoComStatusReal
+                )
+                &&
+                !podeCadastrarObrigacao
+                    ? `
+                                        <span
+                                            class="obrigacao-sem-acao"
+                                        >
+                                            -
+                                        </span>
+                                    `
+                    : ''
+            }
+
+                        </div>
 
                     </td>
 
@@ -1094,7 +1335,7 @@ document.addEventListener(
 
         /*
          * =====================================================
-         * CADASTRO
+         * CADASTRO / ATUALIZAÇÃO
          * =====================================================
          */
 
@@ -1107,11 +1348,6 @@ document.addEventListener(
 
                 ocultarErro();
 
-
-                /*
-                 * Somente CONTADOR e ADMINISTRADOR
-                 * podem enviar POST.
-                 */
 
                 if (
                     !podeCadastrarObrigacao
@@ -1184,7 +1420,7 @@ document.addEventListener(
 
 
                 /*
-                 * Validações básicas.
+                 * Validação empresa.
                  */
 
                 if (
@@ -1314,18 +1550,22 @@ document.addEventListener(
 
                 try {
 
-                    if (idObrigacaoEdicao) {
+                    if (
+                        idObrigacaoEdicao
+                    ) {
+
                         await window.api.put(
                             `/obrigacoes/${idObrigacaoEdicao}`,
                             payload
                         );
+
                     } else {
+
                         await window.api.post(
                             '/obrigacoes',
                             payload
                         );
                     }
-
 
 
                     fecharFormulario();
@@ -1336,7 +1576,7 @@ document.addEventListener(
                 } catch (erro) {
 
                     console.error(
-                        'Erro ao cadastrar obrigação:',
+                        'Erro ao salvar obrigação:',
                         erro
                     );
 
@@ -1344,7 +1584,7 @@ document.addEventListener(
                     exibirErro(
                         erro.message
                         ||
-                        'Erro ao cadastrar obrigação.'
+                        'Erro ao salvar obrigação.'
                     );
 
                 } finally {
@@ -1371,14 +1611,198 @@ document.addEventListener(
                 salvando;
 
 
-            btnSalvar.innerHTML =
-                salvando
-                    ? `
-                        <span class="obrigacao-spinner"></span>
+            if (salvando) {
 
-                        Salvando...
-                    `
+                btnSalvar.innerHTML = `
+                    <span
+                        class="obrigacao-spinner"
+                    ></span>
+
+                    Salvando...
+                `;
+
+                return;
+            }
+
+
+            btnSalvar.textContent =
+                idObrigacaoEdicao
+                    ? 'Salvar alterações'
                     : 'Salvar obrigação';
+        }
+
+
+        /*
+         * =====================================================
+         * EDITAR
+         * =====================================================
+         */
+
+        function editarObrigacao(
+            id
+        ) {
+
+            if (
+                !podeCadastrarObrigacao
+            ) {
+                return;
+            }
+
+
+            const obrigacao =
+                obrigacoesCarregadas.find(
+                    item =>
+                        Number(
+                            item.id
+                        )
+                        ===
+                        Number(
+                            id
+                        )
+                );
+
+
+            if (!obrigacao) {
+
+                exibirErro(
+                    'Obrigação não encontrada.'
+                );
+
+
+                return;
+            }
+
+
+            idObrigacaoEdicao =
+                obrigacao.id;
+
+
+            const campoEmpresa =
+                document.getElementById(
+                    'idEmpresa'
+                );
+
+
+            const campoTipo =
+                document.getElementById(
+                    'tipo'
+                );
+
+
+            const campoCompetencia =
+                document.getElementById(
+                    'competencia'
+                );
+
+
+            const campoVencimento =
+                document.getElementById(
+                    'dataVencimento'
+                );
+
+
+            const campoValor =
+                document.getElementById(
+                    'valor'
+                );
+
+
+            const campoHonorario =
+                document.getElementById(
+                    'honorario'
+                );
+
+
+            const campoStatus =
+                document.getElementById(
+                    'status'
+                );
+
+
+            if (campoEmpresa) {
+
+                campoEmpresa.value =
+                    obrigacao.idEmpresa
+                    ??
+                    '';
+            }
+
+
+            if (campoTipo) {
+
+                campoTipo.value =
+                    obrigacao.tipo
+                    ??
+                    '';
+            }
+
+
+            if (campoCompetencia) {
+
+                campoCompetencia.value =
+                    obrigacao.competencia
+                    ??
+                    '';
+            }
+
+
+            if (campoVencimento) {
+
+                campoVencimento.value =
+                    obrigacao.dataVencimento
+                    ??
+                    '';
+            }
+
+
+            if (campoValor) {
+
+                campoValor.value =
+                    obrigacao.valor
+                    ??
+                    '';
+            }
+
+
+            if (campoHonorario) {
+
+                campoHonorario.value =
+                    obrigacao.honorario
+                    ??
+                    '';
+            }
+
+
+            if (campoStatus) {
+
+                campoStatus.value =
+                    obrigacao.status
+                    ??
+                    'PENDENTE';
+            }
+
+
+            abrirFormulario();
+
+
+            const titulo =
+                document.querySelector(
+                    '.obrigacao-form-header h2'
+                );
+
+
+            if (titulo) {
+
+                titulo.textContent =
+                    'Editar obrigação';
+            }
+
+
+            if (btnSalvar) {
+
+                btnSalvar.textContent =
+                    'Salvar alterações';
+            }
         }
 
 
@@ -1399,7 +1823,8 @@ document.addEventListener(
                     ''
                 )
                     .toUpperCase()
-                === 'PAGA'
+                ===
+                'PAGA'
             );
         }
 
@@ -1981,74 +2406,6 @@ document.addEventListener(
                 '';
         }
 
-        let idObrigacaoEdicao = null;
-
-        function editarObrigacao(id) {
-
-            if (!podeCadastrarObrigacao) {
-                return;
-            }
-
-            const obrigacao =
-                obrigacoesCarregadas.find(
-                    item => Number(item.id) === Number(id)
-                );
-
-            if (!obrigacao) {
-                exibirErro(
-                    'Obrigação não encontrada.'
-                );
-
-                return;
-            }
-
-
-            idObrigacaoEdicao =
-                obrigacao.id;
-
-
-            document.getElementById('idEmpresa').value =
-                obrigacao.idEmpresa ?? '';
-
-            document.getElementById('tipo').value =
-                obrigacao.tipo ?? '';
-
-            document.getElementById('competencia').value =
-                obrigacao.competencia ?? '';
-
-            document.getElementById('dataVencimento').value =
-                obrigacao.dataVencimento ?? '';
-
-            document.getElementById('valor').value =
-                obrigacao.valor ?? '';
-
-            document.getElementById('honorario').value =
-                obrigacao.honorario ?? '';
-
-            document.getElementById('status').value =
-                obrigacao.status ?? 'PENDENTE';
-
-
-            abrirFormulario();
-
-
-            const titulo =
-                document.querySelector(
-                    '.obrigacao-form-header h2'
-                );
-
-            if (titulo) {
-                titulo.textContent =
-                    'Editar obrigação';
-            }
-
-
-            if (btnSalvar) {
-                btnSalvar.textContent =
-                    'Salvar alterações';
-            }
-        }
-
 
         function escaparHtml(
             valor
@@ -2133,3 +2490,558 @@ document.addEventListener(
         inicializar();
     }
 );
+
+
+/*
+ * =============================================================
+ * PAGAMENTOS PIX
+ * =============================================================
+ */
+
+function podePagarObrigacao(
+    obrigacao
+) {
+
+    if (!obrigacao) {
+
+        return false;
+    }
+
+
+    const status =
+        String(
+            obrigacao.status
+            ??
+            ''
+        )
+            .toUpperCase();
+
+
+    return (
+        status === 'PENDENTE'
+        ||
+        status === 'ATRASADA'
+    );
+}
+
+
+async function criarPagamentoPix(
+    idObrigacao
+) {
+
+    if (
+        !idObrigacao
+    ) {
+
+        return;
+    }
+
+
+    const confirmar =
+        window.confirm(
+            'Deseja gerar um pagamento PIX para esta obrigação?'
+        );
+
+
+    if (!confirmar) {
+
+        return;
+    }
+
+
+    try {
+
+        const pagamento =
+            await window.api.post(
+                '/pagamentos',
+                {
+                    idObrigacao:
+                        Number(
+                            idObrigacao
+                        ),
+
+                    metodoPagamento:
+                        'PIX'
+                }
+            );
+
+
+        pagamentoPixAtual =
+            pagamento;
+
+
+        abrirModalPix(
+            pagamento
+        );
+
+    } catch (erro) {
+
+        console.error(
+            'Erro ao criar pagamento PIX:',
+            erro
+        );
+
+
+        const mensagem =
+            erro?.message
+            ||
+            'Não foi possível gerar o pagamento PIX.';
+
+
+        alert(
+            mensagem
+        );
+    }
+}
+
+
+function abrirModalPix(
+    pagamento
+) {
+
+    const backdrop =
+        document.getElementById(
+            'modal-pix-backdrop'
+        );
+
+
+    const qrContainer =
+        document.getElementById(
+            'pix-modal-qr'
+        );
+
+
+    const codigoContainer =
+        document.getElementById(
+            'pix-modal-codigo-container'
+        );
+
+
+    const codigo =
+        document.getElementById(
+            'pix-modal-codigo'
+        );
+
+
+    const detalhes =
+        document.getElementById(
+            'pix-modal-detalhes'
+        );
+
+
+    const status =
+        document.getElementById(
+            'pix-modal-status'
+        );
+
+
+    if (
+        !backdrop
+        ||
+        !qrContainer
+        ||
+        !codigoContainer
+        ||
+        !codigo
+        ||
+        !detalhes
+        ||
+        !status
+    ) {
+
+        console.error(
+            'Elementos do modal PIX não foram encontrados no HTML.'
+        );
+
+
+        alert(
+            'O modal PIX não está configurado corretamente.'
+        );
+
+
+        return;
+    }
+
+
+    qrContainer.innerHTML =
+        '';
+
+
+    codigo.value =
+        '';
+
+
+    /*
+     * QR CODE
+     */
+
+    if (
+        pagamento.qrCodePix
+    ) {
+
+        const img =
+            document.createElement(
+                'img'
+            );
+
+
+        img.alt =
+            'QR Code PIX';
+
+
+        img.src =
+            montarImagemQrPix(
+                pagamento.qrCodePix
+            );
+
+
+        qrContainer.appendChild(
+            img
+        );
+
+
+        qrContainer.style.display =
+            'flex';
+
+    } else {
+
+        qrContainer.style.display =
+            'none';
+    }
+
+
+    /*
+     * COPIA E COLA
+     */
+
+    if (
+        pagamento.codigoPix
+    ) {
+
+        codigo.value =
+            pagamento.codigoPix;
+
+
+        codigoContainer.style.display =
+            'block';
+
+    } else {
+
+        codigoContainer.style.display =
+            'none';
+    }
+
+
+    /*
+     * STATUS
+     */
+
+    status.innerHTML = `
+        <strong>
+            Status:
+            ${formatarStatusPagamento(
+        pagamento.status
+    )}
+        </strong>
+    `;
+
+
+    /*
+     * DETALHES
+     */
+
+    detalhes.innerHTML = `
+
+        <div>
+
+            <span>
+                Pagamento
+            </span>
+
+            <strong>
+                #${pagamento.id ?? '-'}
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Obrigação
+            </span>
+
+            <strong>
+                #${pagamento.idObrigacao ?? '-'}
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Empresa
+            </span>
+
+            <strong>
+                ${escaparTexto(
+        pagamento.razaoSocialEmpresa
+        ||
+        '-'
+    )}
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Valor
+            </span>
+
+            <strong>
+                ${formatarMoedaPagamento(
+        pagamento.valor
+    )}
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                Método
+            </span>
+
+            <strong>
+                ${escaparTexto(
+        pagamento.metodoPagamento
+        ||
+        '-'
+    )}
+            </strong>
+
+        </div>
+
+    `;
+
+
+    backdrop.classList.add(
+        'ativo'
+    );
+}
+
+
+function fecharModalPix() {
+
+    document
+        .getElementById(
+            'modal-pix-backdrop'
+        )
+        ?.classList
+        .remove(
+            'ativo'
+        );
+
+
+    pagamentoPixAtual =
+        null;
+}
+
+
+async function copiarPixObrigacao() {
+
+    if (
+        !pagamentoPixAtual
+        ||
+        !pagamentoPixAtual.codigoPix
+    ) {
+
+        return;
+    }
+
+
+    try {
+
+        await navigator.clipboard.writeText(
+            pagamentoPixAtual.codigoPix
+        );
+
+
+        const botao =
+            document.getElementById(
+                'btn-copiar-pix-obrigacao'
+            );
+
+
+        if (!botao) {
+
+            return;
+        }
+
+
+        const textoOriginal =
+            botao.textContent;
+
+
+        botao.textContent =
+            'PIX copiado!';
+
+
+        setTimeout(
+            () => {
+
+                botao.textContent =
+                    textoOriginal;
+            },
+            1600
+        );
+
+    } catch (erro) {
+
+        console.error(
+            'Erro ao copiar PIX:',
+            erro
+        );
+
+
+        /*
+         * Fallback para navegadores que
+         * não permitem Clipboard API.
+         */
+
+        const campo =
+            document.getElementById(
+                'pix-modal-codigo'
+            );
+
+
+        if (campo) {
+
+            campo.focus();
+
+            campo.select();
+        }
+
+
+        alert(
+            'Não foi possível copiar automaticamente. O código foi selecionado para você copiar.'
+        );
+    }
+}
+
+
+function montarImagemQrPix(
+    qrCode
+) {
+
+    if (
+        String(
+            qrCode
+        )
+            .startsWith(
+                'data:image'
+            )
+    ) {
+
+        return qrCode;
+    }
+
+
+    return (
+        'data:image/png;base64,'
+        +
+        qrCode
+    );
+}
+
+
+function formatarMoedaPagamento(
+    valor
+) {
+
+    return Number(
+        valor
+        ||
+        0
+    )
+        .toLocaleString(
+            'pt-BR',
+            {
+                style:
+                    'currency',
+
+                currency:
+                    'BRL'
+            }
+        );
+}
+
+
+function formatarStatusPagamento(
+    status
+) {
+
+    const mapa = {
+
+        PENDENTE:
+            'Pendente',
+
+        PROCESSANDO:
+            'Processando',
+
+        PAGO:
+            'Pago',
+
+        RECUSADO:
+            'Recusado',
+
+        CANCELADO:
+            'Cancelado',
+
+        EXPIRADO:
+            'Expirado',
+
+        ESTORNADO:
+            'Estornado'
+    };
+
+
+    return mapa[
+            String(
+                status
+                ??
+                ''
+            )
+                .toUpperCase()
+            ]
+        ||
+        status
+        ||
+        '-';
+}
+
+
+function escaparTexto(
+    valor
+) {
+
+    const elemento =
+        document.createElement(
+            'div'
+        );
+
+
+    elemento.textContent =
+        String(
+            valor
+            ??
+            ''
+        );
+
+
+    return elemento.innerHTML;
+}

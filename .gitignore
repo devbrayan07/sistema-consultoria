@@ -31,3 +31,33 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+
+# IntelliJ
+.idea/
+*.iml
+out/
+
+# Maven
+target/
+
+# Logs
+*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Variáveis de ambiente
+.env
+.env.*
+!.env.example
+
+# Credenciais / configs locais
+application-local.properties
+application-secret.properties
+
+# Banco local
+*.db
+*.sqlite

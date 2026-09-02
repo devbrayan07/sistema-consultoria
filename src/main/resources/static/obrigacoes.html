@@ -684,7 +684,9 @@
         </div>
 
 
-        <!-- TABELA -->
+        <!-- =====================================================
+             TABELA
+        ====================================================== -->
 
         <div class="table-responsive obrigacoes-table-wrapper">
 
@@ -718,6 +720,11 @@
                         Status
                     </th>
 
+                    <!-- NOVA COLUNA -->
+                    <th>
+                        Ações
+                    </th>
+
                 </tr>
 
                 </thead>
@@ -728,7 +735,7 @@
                 <tr>
 
                     <td
-                            colspan="6"
+                            colspan="7"
                             class="obrigacoes-loading"
                     >
                         Carregando obrigações...
@@ -756,9 +763,114 @@
 </div>
 
 
+<!-- =====================================================
+     MODAL PIX
+====================================================== -->
+
+<div
+        id="modal-pix-backdrop"
+        class="modal-pix-backdrop"
+>
+
+    <div class="modal-pix">
+
+        <div class="modal-pix-header">
+
+            <div>
+
+                <h2>
+                    Pagamento via PIX
+                </h2>
+
+                <p id="pix-modal-subtitulo">
+                    Escaneie o QR Code ou copie o código PIX.
+                </p>
+
+            </div>
+
+
+            <button
+                    id="btn-fechar-modal-pix"
+                    type="button"
+                    class="modal-pix-fechar"
+                    aria-label="Fechar"
+            >
+                &times;
+            </button>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div
+                id="pix-modal-status"
+                class="pix-modal-status"
+        >
+        </div>
+
+
+        <!-- QR CODE -->
+
+        <div
+                id="pix-modal-qr"
+                class="pix-modal-qr"
+        >
+        </div>
+
+
+        <!-- PIX COPIA E COLA -->
+
+        <div
+                id="pix-modal-codigo-container"
+                class="pix-modal-codigo-container"
+        >
+
+            <label for="pix-modal-codigo">
+                PIX copia e cola
+            </label>
+
+
+            <textarea
+                    id="pix-modal-codigo"
+                    readonly
+            ></textarea>
+
+
+            <button
+                    id="btn-copiar-pix-obrigacao"
+                    type="button"
+                    class="btn-pix-copiar"
+            >
+                Copiar código PIX
+            </button>
+
+        </div>
+
+
+        <!-- DETALHES -->
+
+        <div
+                id="pix-modal-detalhes"
+                class="pix-modal-detalhes"
+        >
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     SCRIPTS
+====================================================== -->
+
 <script src="auth.js"></script>
+
 <script src="api.js"></script>
+
 <script src="layout.js"></script>
+
 <script src="obrigacoes.js"></script>
 
 </body>
