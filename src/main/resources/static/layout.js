@@ -15,7 +15,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const usuario = obterUsuario();
 
     if (!usuario) {
-        console.warn("Usuário não encontrado pelo layout.");
+
+        console.warn(
+            "Usuário não encontrado. Encerrando sessão local."
+        );
+
+        if (
+            window.auth &&
+            typeof window.auth.limparSessao === "function"
+        ) {
+            window.auth.limparSessao();
+        }
+
+        window.location.replace(
+            "/index.html"
+        );
+
         return;
     }
 
@@ -310,25 +325,25 @@ document.addEventListener("DOMContentLoaded", () => {
             itens = [
                 {
                     nome: "Visão geral",
-                    href: "dashboard.html",
+                    href: "/dashboard",
                     pagina: "dashboard.html",
                     icone: iconeDashboard()
                 },
                 {
                     nome: "Minha empresa",
-                    href: "empresas.html",
+                    href: "/empresas",
                     pagina: "empresas.html",
                     icone: iconeEmpresa()
                 },
                 {
                     nome: "Obrigações",
-                    href: "obrigacoes.html",
+                    href: "/obrigacoes",
                     pagina: "obrigacoes.html",
                     icone: iconeObrigacoes()
                 },
                 {
                     nome: "Documentos",
-                    href: "documentos.html",
+                    href: "/documentos",
                     pagina: "documentos.html",
                     icone: iconeDocumentos()
                 }
@@ -339,25 +354,25 @@ document.addEventListener("DOMContentLoaded", () => {
             itens = [
                 {
                     nome: "Visão geral",
-                    href: "dashboard.html",
+                    href: "/dashboard",
                     pagina: "dashboard.html",
                     icone: iconeDashboard()
                 },
                 {
                     nome: "Empresas",
-                    href: "empresas.html",
+                    href: "/empresas",
                     pagina: "empresas.html",
                     icone: iconeEmpresa()
                 },
                 {
                     nome: "Obrigações",
-                    href: "obrigacoes.html",
+                    href: "/obrigacoes",
                     pagina: "obrigacoes.html",
                     icone: iconeObrigacoes()
                 },
                 {
                     nome: "Documentos",
-                    href: "documentos.html",
+                    href: "/documentos",
                     pagina: "documentos.html",
                     icone: iconeDocumentos()
                 }
@@ -368,25 +383,25 @@ document.addEventListener("DOMContentLoaded", () => {
             itens = [
                 {
                     nome: "Visão geral",
-                    href: "dashboard.html",
+                    href: "/dashboard",
                     pagina: "dashboard.html",
                     icone: iconeDashboard()
                 },
                 {
                     nome: "Empresas",
-                    href: "empresas.html",
+                    href: "/empresas",
                     pagina: "empresas.html",
                     icone: iconeEmpresa()
                 },
                 {
                     nome: "Obrigações",
-                    href: "obrigacoes.html",
+                    href: "/obrigacoes",
                     pagina: "obrigacoes.html",
                     icone: iconeObrigacoes()
                 },
                 {
                     nome: "Documentos",
-                    href: "documentos.html",
+                    href: "/documentos",
                     pagina: "documentos.html",
                     icone: iconeDocumentos()
                 },
@@ -396,7 +411,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 {
                     nome: "Usuários",
-                    href: "usuarios.html",
+                    href: "/usuarios",
                     pagina: "usuarios.html",
                     icone: iconeUsuarios()
                 }
@@ -407,7 +422,7 @@ document.addEventListener("DOMContentLoaded", () => {
             itens = [
                 {
                     nome: "Visão geral",
-                    href: "dashboard.html",
+                    href: "/dashboard",
                     pagina: "dashboard.html",
                     icone: iconeDashboard()
                 }
@@ -647,11 +662,15 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem("token");
         localStorage.removeItem("usuario");
         localStorage.removeItem("user");
+        localStorage.removeItem("nome");
+        localStorage.removeItem("email");
+        localStorage.removeItem("tipo");
 
         sessionStorage.clear();
 
-        window.location.href =
-            "index.html";
+        window.location.replace(
+            "/index.html"
+        );
     }
 
 

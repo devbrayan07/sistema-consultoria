@@ -146,6 +146,17 @@ public class SecurityConfig {
 
                         .requestMatchers(
                                 "/",
+
+                                "/dashboard",
+                                "/empresas",
+                                "/obrigacoes",
+                                "/documentos",
+                                "/usuarios",
+                                "/pagamentos",
+                                "/esqueci-senha",
+                                "/redefinir-senha",
+                                "/cadastro",
+
                                 "/index.html",
                                 "/dashboard.html",
                                 "/empresas.html",
@@ -156,12 +167,12 @@ public class SecurityConfig {
                                 "/esqueci-senha.html",
                                 "/redefinir-senha.html",
                                 "/cadastro.html",
+
                                 "/style.css",
                                 "/*.js",
                                 "/favicon.ico"
                         )
                         .permitAll()
-
 
                         /*
                          * =================================================

@@ -112,7 +112,7 @@ document.addEventListener(
 
 
                     window.location.replace(
-                        'dashboard.html'
+                        '/dashboard'
                     );
 
                 } catch (erro) {
