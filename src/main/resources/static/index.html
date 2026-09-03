@@ -9,7 +9,7 @@
             content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Login - Consultoria ERP</title>
+    <title>Login - Mercury Consultoria</title>
 
     <link
             rel="stylesheet"
@@ -36,7 +36,7 @@
                 </div>
 
                 <div>
-                    <strong>Consultoria ERP</strong>
+                    <strong>Mercury Consultoria</strong>
                     <span>Gestão empresarial integrada</span>
                 </div>
 
@@ -121,7 +121,7 @@
 
 
             <div class="login-brand-footer">
-                <span>Consultoria ERP</span>
+                <span>Mercury Consultoria</span>
                 <span>•</span>
                 <span>Sistema de gestão empresarial</span>
             </div>
@@ -146,7 +146,7 @@
                 </div>
 
                 <div>
-                    <strong>Consultoria ERP</strong>
+                    <strong>Mercury Consultoria</strong>
                     <span>Gestão empresarial integrada</span>
                 </div>
 
@@ -236,6 +236,13 @@
                         <label for="senha">
                             Senha
                         </label>
+
+                        <a
+                                href="/esqueci-senha.html"
+                                class="login-forgot-password"
+                        >
+                            Esqueci minha senha
+                        </a>
 
                     </div>
 
@@ -401,16 +408,5 @@
 <script src="api.js"></script>
 <script src="login.js"></script>
 
-<script>
-    if (
-        typeof auth !== 'undefined'
-        &&
-        auth.getToken()
-    ) {
-        window.location.href = 'dashboard.html';
-    }
-</script>
-
 </body>
-
 </html>

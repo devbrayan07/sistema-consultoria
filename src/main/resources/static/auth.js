@@ -130,7 +130,7 @@
 
 
                 window.location.replace(
-                    'index.html'
+                    '/index.html'
                 );
 
 
@@ -161,7 +161,7 @@
 
 
             window.location.replace(
-                'index.html'
+                '/index.html'
             );
         }
     };

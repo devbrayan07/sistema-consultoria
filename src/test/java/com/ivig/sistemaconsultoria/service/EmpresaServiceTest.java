@@ -3,6 +3,7 @@ package com.ivig.sistemaconsultoria.service;
 import com.ivig.sistemaconsultoria.dto.EmpresaRequestDTO;
 import com.ivig.sistemaconsultoria.dto.EmpresaResponseDTO;
 import com.ivig.sistemaconsultoria.enums.RegimeTributario;
+import com.ivig.sistemaconsultoria.enums.TipoUsuario;
 import com.ivig.sistemaconsultoria.exceptions.BusinessException;
 import com.ivig.sistemaconsultoria.exceptions.ResourceNotFoundException;
 import com.ivig.sistemaconsultoria.model.Empresa;
@@ -10,6 +11,7 @@ import com.ivig.sistemaconsultoria.model.Usuario;
 import com.ivig.sistemaconsultoria.repository.EmpresaRepository;
 import com.ivig.sistemaconsultoria.repository.UsuarioRepository;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -28,17 +30,29 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class EmpresaServiceTest {
 
-
     @Mock
     private EmpresaRepository empresaRepository;
 
     @Mock
     private UsuarioRepository usuarioRepository;
 
-
     @InjectMocks
     private EmpresaService empresaService;
 
+    private Usuario usuario;
+
+
+    @BeforeEach
+    void setUp() {
+
+        usuario = new Usuario();
+
+        usuario.setId(1);
+        usuario.setNome("Usuário Teste");
+        usuario.setEmail("teste@email.com");
+        usuario.setTipo(TipoUsuario.USUARIO);
+        usuario.setAtivo(true);
+    }
 
 
     @Test
@@ -53,12 +67,6 @@ class EmpresaServiceTest {
         dto.setIdUsuarioCliente(1);
 
 
-        Usuario usuario = new Usuario();
-
-        usuario.setId(1);
-        usuario.setNome("Cliente Teste");
-
-
         Empresa empresaSalva = new Empresa();
 
         empresaSalva.setIdEmpresa(1);
@@ -69,22 +77,34 @@ class EmpresaServiceTest {
         empresaSalva.setCliente(usuario);
 
 
-        when(empresaRepository.existsByCnpj(dto.getCnpj()))
-                .thenReturn(false);
+        when(
+                empresaRepository.existsByCnpj(
+                        dto.getCnpj()
+                )
+        ).thenReturn(false);
 
 
-        when(usuarioRepository.findById(1))
-                .thenReturn(Optional.of(usuario));
+        when(
+                usuarioRepository.findById(1)
+        ).thenReturn(
+                Optional.of(usuario)
+        );
 
 
-        when(empresaRepository.save(any(Empresa.class)))
-                .thenReturn(empresaSalva);
-
+        when(
+                empresaRepository.save(
+                        any(Empresa.class)
+                )
+        ).thenReturn(
+                empresaSalva
+        );
 
 
         EmpresaResponseDTO resultado =
-                empresaService.criar(dto);
-
+                empresaService.criar(
+                        dto,
+                        usuario
+                );
 
 
         assertNotNull(resultado);
@@ -100,136 +120,155 @@ class EmpresaServiceTest {
         );
 
 
-        verify(empresaRepository)
-                .save(any(Empresa.class));
+        verify(
+                empresaRepository
+        ).save(
+                any(Empresa.class)
+        );
     }
-
 
 
     @Test
     void deveLancarErroQuandoCnpjJaExiste() {
 
+        EmpresaRequestDTO dto =
+                new EmpresaRequestDTO();
 
-        EmpresaRequestDTO dto = new EmpresaRequestDTO();
+        dto.setCnpj(
+                "12345678000199"
+        );
 
-        dto.setCnpj("12345678000199");
 
-
-        when(empresaRepository.existsByCnpj(dto.getCnpj()))
-                .thenReturn(true);
-
+        when(
+                empresaRepository.existsByCnpj(
+                        dto.getCnpj()
+                )
+        ).thenReturn(true);
 
 
         assertThrows(
                 BusinessException.class,
-                () -> empresaService.criar(dto)
+                () -> empresaService.criar(
+                        dto,
+                        usuario
+                )
         );
 
 
-        verify(usuarioRepository, never())
-                .findById(any());
+        verify(
+                usuarioRepository,
+                never()
+        ).findById(
+                any()
+        );
     }
-
 
 
     @Test
     void deveLancarErroQuandoUsuarioNaoExiste() {
 
+        EmpresaRequestDTO dto =
+                new EmpresaRequestDTO();
 
-        EmpresaRequestDTO dto = new EmpresaRequestDTO();
+        dto.setCnpj(
+                "12345678000199"
+        );
 
-        dto.setCnpj("12345678000199");
         dto.setIdUsuarioCliente(1);
 
 
+        when(
+                empresaRepository.existsByCnpj(
+                        dto.getCnpj()
+                )
+        ).thenReturn(false);
 
-        when(empresaRepository.existsByCnpj(dto.getCnpj()))
-                .thenReturn(false);
 
-
-        when(usuarioRepository.findById(1))
-                .thenReturn(Optional.empty());
-
+        when(
+                usuarioRepository.findById(1)
+        ).thenReturn(
+                Optional.empty()
+        );
 
 
         assertThrows(
                 ResourceNotFoundException.class,
-                () -> empresaService.criar(dto)
+                () -> empresaService.criar(
+                        dto,
+                        usuario
+                )
         );
-
     }
-
 
 
     @Test
     void deveBuscarEmpresaPorId() {
 
-
-        Empresa empresa = new Empresa();
+        Empresa empresa =
+                new Empresa();
 
         empresa.setIdEmpresa(1);
-        empresa.setRazaoSocial("Empresa Teste");
+        empresa.setRazaoSocial(
+                "Empresa Teste"
+        );
 
 
-
-        when(empresaRepository.findById(1))
-                .thenReturn(Optional.of(empresa));
-
+        when(
+                empresaRepository.findById(1)
+        ).thenReturn(
+                Optional.of(empresa)
+        );
 
 
         EmpresaResponseDTO resultado =
                 empresaService.buscarPorId(1);
 
 
-
         assertEquals(
                 "Empresa Teste",
                 resultado.getRazaoSocial()
         );
-
     }
-
-
 
 
     @Test
     void deveLancarErroQuandoEmpresaNaoExiste() {
 
-
-        when(empresaRepository.findById(99))
-                .thenReturn(Optional.empty());
-
+        when(
+                empresaRepository.findById(99)
+        ).thenReturn(
+                Optional.empty()
+        );
 
 
         assertThrows(
                 ResourceNotFoundException.class,
                 () -> empresaService.buscarPorId(99)
         );
-
     }
-
-
 
 
     @Test
     void deveListarEmpresas() {
 
-
-        Empresa empresa = new Empresa();
+        Empresa empresa =
+                new Empresa();
 
         empresa.setIdEmpresa(1);
-        empresa.setRazaoSocial("Empresa Teste");
+        empresa.setRazaoSocial(
+                "Empresa Teste"
+        );
 
 
-
-        when(empresaRepository.findAll())
-                .thenReturn(List.of(empresa));
-
+        when(
+                empresaRepository.findAll()
+        ).thenReturn(
+                List.of(empresa)
+        );
 
 
         List<EmpresaResponseDTO> resultado =
                 empresaService.listarTodas();
-
 
 
         assertEquals(
@@ -240,30 +279,29 @@ class EmpresaServiceTest {
 
         assertEquals(
                 "Empresa Teste",
-                resultado.get(0).getRazaoSocial()
+                resultado
+                        .get(0)
+                        .getRazaoSocial()
         );
-
     }
-
-
 
 
     @Test
     void deveRetornarListaVaziaQuandoNaoExistirEmpresa() {
 
-
-        when(empresaRepository.findAll())
-                .thenReturn(List.of());
-
+        when(
+                empresaRepository.findAll()
+        ).thenReturn(
+                List.of()
+        );
 
 
         List<EmpresaResponseDTO> resultado =
                 empresaService.listarTodas();
 
 
-
-        assertTrue(resultado.isEmpty());
-
+        assertTrue(
+                resultado.isEmpty()
+        );
     }
-
 }

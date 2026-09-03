@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Redefinir senha - Consultoria ERP</title>
+
+    <link
+            rel="stylesheet"
+            href="/style.css"
+    >
+
+</head>
+
+<body class="login-page">
+
+<div class="login-shell">
+
+    <section class="login-brand-panel">
+
+        <div class="login-brand-content">
+
+            <div class="login-brand-logo">
+
+                <div class="login-brand-logo-icon">
+                    C
+                </div>
+
+                <div>
+                    <strong>Consultoria ERP</strong>
+                    <span>Gestão empresarial integrada</span>
+                </div>
+
+            </div>
+
+            <div class="login-brand-copy">
+
+                <span class="login-brand-eyebrow">
+                    Segurança da conta
+                </span>
+
+                <h1>
+                    Defina uma nova senha para sua conta.
+                </h1>
+
+                <p>
+                    Escolha uma senha segura com pelo menos 8 caracteres.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <main class="login-form-panel">
+
+        <div class="login-form-wrapper">
+
+            <div class="login-form-header">
+
+                <span class="login-form-badge">
+                    Nova senha
+                </span>
+
+                <h2>
+                    Redefinir senha
+                </h2>
+
+                <p>
+                    Digite e confirme sua nova senha.
+                </p>
+
+            </div>
+
+
+            <div
+                    id="error-alert"
+                    class="alert-error login-alert"
+                    style="display: none;"
+            ></div>
+
+
+            <div
+                    id="success-alert"
+                    class="alert-success login-alert"
+                    style="display: none;"
+            ></div>
+
+
+            <form
+                    id="form-redefinir-senha"
+                    class="login-form"
+            >
+
+                <div class="login-field">
+
+                    <label for="novaSenha">
+                        Nova senha
+                    </label>
+
+                    <div class="login-input-wrapper">
+
+                        <input
+                                type="password"
+                                id="novaSenha"
+                                required
+                                minlength="8"
+                                autocomplete="new-password"
+                                placeholder="Digite sua nova senha"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="login-field">
+
+                    <label for="confirmarSenha">
+                        Confirmar senha
+                    </label>
+
+                    <div class="login-input-wrapper">
+
+                        <input
+                                type="password"
+                                id="confirmarSenha"
+                                required
+                                minlength="8"
+                                autocomplete="new-password"
+                                placeholder="Digite novamente"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button
+                        type="submit"
+                        id="btn-redefinir"
+                        class="login-submit-button"
+                >
+
+                    <span id="btn-redefinir-text">
+                        Redefinir senha
+                    </span>
+
+                </button>
+
+            </form>
+
+
+            <div class="login-register">
+
+                <a
+                        href="/index.html"
+                        class="login-register-link"
+                >
+                    Voltar para o login
+                </a>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script src="/auth.js"></script>
+<script src="/api.js"></script>
+<script src="/redefinir-senha.js"></script>
+
+</body>
+
+</html>

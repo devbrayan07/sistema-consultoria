@@ -102,6 +102,16 @@
 
         if (response.status === 401) {
 
+            const isLogin =
+                endpoint === '/auth/login';
+
+            if (isLogin) {
+
+                throw new Error(
+                    'E-mail ou senha incorretos.'
+                );
+            }
+
             window.auth?.limparSessao?.();
 
             const paginaAtual =
@@ -115,7 +125,7 @@
             ) {
 
                 window.location.replace(
-                    'index.html'
+                    '/index.html'
                 );
             }
 
@@ -123,7 +133,6 @@
                 'Sessão expirada. Faça login novamente.'
             );
         }
-
         if (!response.ok) {
 
             const mensagem =

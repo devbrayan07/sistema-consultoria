@@ -1,12 +1,10 @@
 package com.ivig.sistemaconsultoria.controller;
 
 import com.ivig.sistemaconsultoria.config.JwtTokenProvider;
-import com.ivig.sistemaconsultoria.dto.CadastroRequestDTO;
-import com.ivig.sistemaconsultoria.dto.LoginRequestDTO;
-import com.ivig.sistemaconsultoria.dto.LoginResponseDTO;
-import com.ivig.sistemaconsultoria.dto.UsuarioResponseDTO;
+import com.ivig.sistemaconsultoria.dto.*;
 import com.ivig.sistemaconsultoria.model.Usuario;
 import com.ivig.sistemaconsultoria.repository.UsuarioRepository;
+import com.ivig.sistemaconsultoria.service.RecuperacaoSenhaService;
 import com.ivig.sistemaconsultoria.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +24,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final UsuarioService usuarioService;
+    private final RecuperacaoSenhaService recuperacaoSenhaService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(
@@ -89,5 +88,49 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(usuario);
+    }
+
+    @PostMapping("/esqueci-senha")
+    public ResponseEntity<?> esqueciSenha(
+            @RequestBody
+            @Valid
+            EsqueciSenhaRequestDTO dto
+    ) {
+
+        recuperacaoSenhaService
+                .solicitarRecuperacao(
+                        dto.getEmail()
+                );
+
+
+        return ResponseEntity.ok(
+                Map.of(
+                        "mensagem",
+                        "Se o e-mail estiver cadastrado, enviaremos as instruções para redefinir sua senha."
+                )
+        );
+    }
+
+
+    @PostMapping("/redefinir-senha")
+    public ResponseEntity<?> redefinirSenha(
+            @RequestBody
+            @Valid
+            RedefinirSenhaRequestDTO dto
+    ) {
+
+        recuperacaoSenhaService
+                .redefinirSenha(
+                        dto.getToken(),
+                        dto.getNovaSenha()
+                );
+
+
+        return ResponseEntity.ok(
+                Map.of(
+                        "mensagem",
+                        "Senha redefinida com sucesso."
+                )
+        );
     }
 }

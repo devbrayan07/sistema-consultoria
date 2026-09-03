@@ -153,6 +153,8 @@ public class SecurityConfig {
                                 "/documentos.html",
                                 "/usuarios.html",
                                 "/pagamentos.html",
+                                "/esqueci-senha.html",
+                                "/redefinir-senha.html",
                                 "/cadastro.html",
                                 "/style.css",
                                 "/*.js",
