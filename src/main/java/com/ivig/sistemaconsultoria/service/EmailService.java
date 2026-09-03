@@ -1,19 +1,35 @@
 package com.ivig.sistemaconsultoria.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
+
+import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class EmailService {
 
-    private final JavaMailSender mailSender;
+    private final RestClient restClient;
+    private final String remetente;
 
-    @Value("${app.mail.from}")
-    private String remetente;
+    public EmailService(
+            @Value("${resend.api-key}") String apiKey,
+            @Value("${resend.from-email}") String remetente
+    ) {
+
+        this.remetente = remetente;
+
+        this.restClient = RestClient.builder()
+                .baseUrl("https://api.resend.com")
+                .defaultHeader(
+                        "Authorization",
+                        "Bearer " + apiKey
+                )
+                .build();
+    }
 
     public void enviarRecuperacaoSenha(
             String destinatario,
@@ -21,16 +37,10 @@ public class EmailService {
             String linkRecuperacao
     ) {
 
-        SimpleMailMessage mensagem =
-                new SimpleMailMessage();
+        String assunto =
+                "Redefinição de senha - Mercury Consultoria";
 
-        mensagem.setFrom(remetente);
-        mensagem.setTo(destinatario);
-        mensagem.setSubject(
-                "Redefinição de senha - Mercury Consultoria"
-        );
-
-        mensagem.setText(
+        String conteudo =
                 "Olá, " + nomeUsuario + ".\n\n"
                         + "Recebemos uma solicitação para redefinir a senha da sua conta.\n\n"
                         + "Acesse o link abaixo para criar uma nova senha:\n\n"
@@ -38,13 +48,43 @@ public class EmailService {
                         + "\n\n"
                         + "Este link é válido por 30 minutos e poderá ser utilizado apenas uma vez.\n\n"
                         + "Se você não solicitou esta alteração, ignore este e-mail.\n\n"
-                        + "Mercury Consultoria"
+                        + "Mercury Consultoria";
+
+        Map<String, Object> corpo = Map.of(
+                "from",
+                "Mercury Consultoria <" + remetente + ">",
+                "to",
+                new String[]{destinatario},
+                "subject",
+                assunto,
+                "text",
+                conteudo
         );
 
-        System.out.println("Enviando e-mail para: " + destinatario);
+        try {
 
-        mailSender.send(mensagem);
+            restClient.post()
+                    .uri("/emails")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(corpo)
+                    .retrieve()
+                    .toBodilessEntity();
 
-        System.out.println("E-mail enviado pelo Spring sem exceção.");
+        } catch (RestClientResponseException erro) {
+
+            throw new IllegalStateException(
+                    "O serviço de e-mail recusou o envio. HTTP "
+                            + erro.getStatusCode().value()
+                            + ".",
+                    erro
+            );
+
+        } catch (RestClientException erro) {
+
+            throw new IllegalStateException(
+                    "Não foi possível conectar ao serviço de e-mail.",
+                    erro
+            );
+        }
     }
 }
