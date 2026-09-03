@@ -28,7 +28,7 @@ public class MercadoPagoWebhookService {
 
     private final MercadoPagoService mercadoPagoService;
 
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
 
     @Value("${mercadopago.webhook-secret}")
