@@ -357,55 +357,25 @@ document.addEventListener(
 
         function fecharFormulario() {
 
-            idObrigacaoEdicao = null;
-
-            const titulo =
-                document.querySelector(
-                    '.obrigacao-form-header h2'
-                );
-
-            if (titulo) {
-                titulo.textContent =
-                    'Cadastrar nova obrigação';
-            }
-
-            if (btnSalvar) {
-                btnSalvar.textContent =
-                    'Salvar obrigação';
-            }
-
-
             if (!cardForm) {
                 return;
             }
 
-
             cardForm.style.display =
                 'none';
 
-
             if (formDocumento) {
-
                 formDocumento.reset();
             }
 
-
             ocultarErro();
-
 
             atualizarNomeArquivoSelecionado(
                 null
             );
 
-
-            /*
-             * Garante que o botão não reapareça
-             * para USUARIO.
-             */
-
             aplicarPermissoesDocumentos();
         }
-
 
         btnToggle?.addEventListener(
             'click',

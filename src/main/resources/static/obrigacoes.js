@@ -255,7 +255,7 @@ document.addEventListener(
         let obrigacoesCarregadas = [];
         let empresasCarregadas = [];
 
-        let idObrigacaoEdicao = null;
+
 
 
         /*
@@ -415,24 +415,12 @@ document.addEventListener(
                 null;
 
 
-            const titulo =
-                document.querySelector(
-                    '.obrigacao-form-header h2'
-                );
 
 
-            if (titulo) {
-
-                titulo.textContent =
-                    'Nova obrigação';
-            }
 
 
-            if (btnSalvar) {
 
-                btnSalvar.textContent =
-                    'Salvar obrigação';
-            }
+
 
 
             ocultarErro();
