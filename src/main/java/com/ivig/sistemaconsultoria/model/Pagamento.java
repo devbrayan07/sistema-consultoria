@@ -23,12 +23,20 @@ public class Pagamento {
     @Column(name = "id_pagamento")
     private Integer id;
 
+
+    /*
+     * ============================================================
+     * RELACIONAMENTOS
+     * ============================================================
+     */
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "id",
+            name = "id_usuario",
             nullable = false
     )
     private Usuario usuario;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
@@ -37,11 +45,19 @@ public class Pagamento {
     )
     private Empresa empresa;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "id_obrigacao_fiscal"
     )
     private ObrigacaoFiscal obrigacao;
+
+
+    /*
+     * ============================================================
+     * CLASSIFICAÇÃO
+     * ============================================================
+     */
 
     @Enumerated(EnumType.STRING)
     @Column(
@@ -51,6 +67,7 @@ public class Pagamento {
     )
     private TipoPagamento tipoPagamento;
 
+
     @Enumerated(EnumType.STRING)
     @Column(
             name = "metodo_pagamento",
@@ -59,8 +76,10 @@ public class Pagamento {
     )
     private MetodoPagamento metodoPagamento;
 
+
     @Enumerated(EnumType.STRING)
     @Column(
+            name = "status",
             nullable = false,
             length = 30
     )
@@ -68,18 +87,72 @@ public class Pagamento {
     private StatusPagamento status =
             StatusPagamento.PENDENTE;
 
+
+    /*
+     * ============================================================
+     * VALORES
+     * ============================================================
+     */
+
     @Column(
+            name = "valor_original",
             nullable = false,
             precision = 12,
             scale = 2
     )
-    private BigDecimal valor;
+    private BigDecimal valorOriginal;
+
+
+    @Column(
+            name = "valor_cobrado",
+            nullable = false,
+            precision = 12,
+            scale = 2
+    )
+    private BigDecimal valorCobrado;
+
+
+    /*
+     * ============================================================
+     * INTEGRAÇÃO COM GATEWAY
+     * ============================================================
+     */
 
     @Column(
             name = "id_pagamento_externo",
             length = 150
     )
     private String idPagamentoExterno;
+
+
+    @Column(
+            name = "external_reference",
+            length = 150,
+            unique = true
+    )
+    private String externalReference;
+
+
+    @Column(
+            name = "idempotency_key",
+            length = 100,
+            unique = true
+    )
+    private String idempotencyKey;
+
+
+    @Column(
+            name = "url_pagamento",
+            length = 1000
+    )
+    private String urlPagamento;
+
+
+    /*
+     * ============================================================
+     * PIX
+     * ============================================================
+     */
 
     @Lob
     @Column(
@@ -88,12 +161,46 @@ public class Pagamento {
     )
     private String codigoPix;
 
+
     @Lob
     @Column(
             name = "qr_code_pix",
             columnDefinition = "LONGTEXT"
     )
     private String qrCodePix;
+
+
+    /*
+     * ============================================================
+     * BOLETO
+     * ============================================================
+     */
+
+    @Column(
+            name = "boleto_codigo_barras",
+            length = 255
+    )
+    private String boletoCodigoBarras;
+
+
+    /*
+     * ============================================================
+     * MOTIVO / DETALHES
+     * ============================================================
+     */
+
+    @Column(
+            name = "motivo_recusa",
+            length = 500
+    )
+    private String motivoRecusa;
+
+
+    /*
+     * ============================================================
+     * DATAS
+     * ============================================================
+     */
 
     @Column(
             name = "data_criacao",
@@ -103,14 +210,73 @@ public class Pagamento {
     private LocalDateTime dataCriacao =
             LocalDateTime.now();
 
+
+    @Column(
+            name = "data_atualizacao"
+    )
+    private LocalDateTime dataAtualizacao;
+
+
     @Column(
             name = "data_pagamento"
     )
     private LocalDateTime dataPagamento;
 
+
     @Column(
             name = "data_expiracao"
     )
     private LocalDateTime dataExpiracao;
-}
 
+
+    @Column(
+            name = "data_cancelamento"
+    )
+    private LocalDateTime dataCancelamento;
+
+
+    /*
+     * ============================================================
+     * CALLBACKS JPA
+     * ============================================================
+     */
+
+    @PrePersist
+    public void prePersist() {
+
+        LocalDateTime agora =
+                LocalDateTime.now();
+
+        if (dataCriacao == null) {
+            dataCriacao = agora;
+        }
+
+        dataAtualizacao = agora;
+
+        if (status == null) {
+            status =
+                    StatusPagamento.PENDENTE;
+        }
+    }
+
+
+    @PreUpdate
+    public void preUpdate() {
+
+        dataAtualizacao =
+                LocalDateTime.now();
+    }
+
+
+    @Column(
+            name = "id_order_externo",
+            length = 150
+    )
+    private String idOrderExterno;
+
+    @Column(
+            name = "id_transacao_externa",
+            length = 150
+    )
+    private String idTransacaoExterna;
+}

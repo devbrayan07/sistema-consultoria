@@ -6,5 +6,6 @@ public enum StatusPagamento {
     PAGO,
     RECUSADO,
     CANCELADO,
-    ESTORNADO
+    ESTORNADO,
+    EXPIRADO
 }

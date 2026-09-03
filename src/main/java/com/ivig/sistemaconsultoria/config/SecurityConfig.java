@@ -157,6 +157,7 @@ public class SecurityConfig {
                                 "/redefinir-senha",
                                 "/cadastro",
 
+
                                 "/index.html",
                                 "/dashboard.html",
                                 "/empresas.html",

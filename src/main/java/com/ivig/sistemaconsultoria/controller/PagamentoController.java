@@ -1,5 +1,6 @@
 package com.ivig.sistemaconsultoria.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ivig.sistemaconsultoria.dto.PagamentoRequestDTO;
 import com.ivig.sistemaconsultoria.dto.PagamentoResponseDTO;
 import com.ivig.sistemaconsultoria.enums.TipoUsuario;
@@ -33,7 +34,7 @@ public class PagamentoController {
     public ResponseEntity<PagamentoResponseDTO> criar(
             @RequestBody @Valid PagamentoRequestDTO dto,
             Authentication authentication
-    ) {
+    ) throws JsonProcessingException {
 
         Usuario usuario =
                 obterUsuarioAutenticado(authentication);

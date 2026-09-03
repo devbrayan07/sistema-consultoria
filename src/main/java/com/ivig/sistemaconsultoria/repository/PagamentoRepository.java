@@ -37,4 +37,6 @@ public interface PagamentoRepository
     List<Pagamento> findByStatusOrderByDataCriacaoDesc(
             StatusPagamento status
     );
+
+    Optional<Pagamento> findByIdOrderExterno(String idOrderExterno);
 }

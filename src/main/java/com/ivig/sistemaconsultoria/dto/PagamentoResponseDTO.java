@@ -13,15 +13,51 @@ import java.time.LocalDateTime;
 @Builder
 public class PagamentoResponseDTO {
 
+    /*
+     * ============================================================
+     * IDENTIFICAÇÃO
+     * ============================================================
+     */
+
     private Integer id;
 
+
+    /*
+     * ============================================================
+     * USUÁRIO
+     * ============================================================
+     */
+
     private Integer idUsuario;
+
     private String nomeUsuario;
 
+
+    /*
+     * ============================================================
+     * EMPRESA
+     * ============================================================
+     */
+
     private Integer idEmpresa;
+
     private String razaoSocialEmpresa;
 
+
+    /*
+     * ============================================================
+     * OBRIGAÇÃO
+     * ============================================================
+     */
+
     private Integer idObrigacao;
+
+
+    /*
+     * ============================================================
+     * PAGAMENTO
+     * ============================================================
+     */
 
     private TipoPagamento tipoPagamento;
 
@@ -29,17 +65,77 @@ public class PagamentoResponseDTO {
 
     private StatusPagamento status;
 
-    private BigDecimal valor;
+    private String idOrderExterno;
+
+    private String idTransacaoExterna;
+
+
+    /*
+     * ============================================================
+     * VALORES
+     * ============================================================
+     */
+
+    private BigDecimal valorOriginal;
+
+    private BigDecimal valorCobrado;
+
+
+    /*
+     * ============================================================
+     * GATEWAY
+     * ============================================================
+     */
 
     private String idPagamentoExterno;
+
+    private String externalReference;
+
+    private String urlPagamento;
+
+
+    /*
+     * ============================================================
+     * PIX
+     * ============================================================
+     */
 
     private String codigoPix;
 
     private String qrCodePix;
 
+
+    /*
+     * ============================================================
+     * BOLETO
+     * ============================================================
+     */
+
+    private String boletoCodigoBarras;
+
+
+    /*
+     * ============================================================
+     * DETALHES
+     * ============================================================
+     */
+
+    private String motivoRecusa;
+
+
+    /*
+     * ============================================================
+     * DATAS
+     * ============================================================
+     */
+
     private LocalDateTime dataCriacao;
+
+    private LocalDateTime dataAtualizacao;
 
     private LocalDateTime dataPagamento;
 
     private LocalDateTime dataExpiracao;
+
+    private LocalDateTime dataCancelamento;
 }

@@ -1,5 +1,6 @@
 package com.ivig.sistemaconsultoria.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ivig.sistemaconsultoria.dto.PagamentoRequestDTO;
 import com.ivig.sistemaconsultoria.dto.PagamentoResponseDTO;
 import com.ivig.sistemaconsultoria.enums.MetodoPagamento;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +47,7 @@ public class PagamentoService {
     public PagamentoResponseDTO criarPagamento(
             PagamentoRequestDTO dto,
             Usuario usuarioAutenticado
-    ) {
+    ) throws JsonProcessingException {
 
         /*
          * ========================================================
@@ -54,14 +56,12 @@ public class PagamentoService {
          */
 
         if (usuarioAutenticado == null) {
-
             throw new AccessDeniedException(
                     "Usuário não autenticado."
             );
         }
 
         if (!Boolean.TRUE.equals(usuarioAutenticado.getAtivo())) {
-
             throw new AccessDeniedException(
                     "Usuário inativo."
             );
@@ -94,7 +94,6 @@ public class PagamentoService {
                 obrigacao.getEmpresa();
 
         if (empresa == null) {
-
             throw new IllegalArgumentException(
                     "A obrigação não possui uma empresa vinculada."
             );
@@ -111,7 +110,6 @@ public class PagamentoService {
                 empresa.getCliente();
 
         if (cliente == null) {
-
             throw new IllegalArgumentException(
                     "A empresa não possui um cliente responsável."
             );
@@ -120,11 +118,8 @@ public class PagamentoService {
 
         /*
          * ========================================================
-         * AUTORIZAÇÃO DO CLIENTE
+         * AUTORIZAÇÃO
          * ========================================================
-         *
-         * Um USUARIO comum só pode pagar obrigações pertencentes
-         * à própria empresa.
          */
 
         if (
@@ -165,8 +160,6 @@ public class PagamentoService {
          * ========================================================
          * MÉTODO DE PAGAMENTO
          * ========================================================
-         *
-         * Neste momento o sistema trabalha somente com PIX.
          */
 
         if (
@@ -182,17 +175,17 @@ public class PagamentoService {
 
         /*
          * ========================================================
-         * VALOR
+         * VALOR ORIGINAL
          * ========================================================
          */
 
-        BigDecimal valor =
+        BigDecimal valorOriginal =
                 obrigacao.getValor();
 
         if (
-                valor == null
+                valorOriginal == null
                         ||
-                        valor.compareTo(
+                        valorOriginal.compareTo(
                                 BigDecimal.ZERO
                         ) <= 0
         ) {
@@ -205,11 +198,25 @@ public class PagamentoService {
 
         /*
          * ========================================================
-         * VERIFICAR PAGAMENTO PENDENTE
+         * VALOR COBRADO
          * ========================================================
          *
-         * Evita gerar vários PIX para a mesma obrigação enquanto
-         * já houver um pagamento em aberto.
+         * Por enquanto começa igual ao valor original.
+         *
+         * Se o MercadoPagoService estiver em sandbox e decidir
+         * substituir por um valor fixo de teste, podemos depois
+         * retornar esse valor real cobrado pelo gateway.
+         * ========================================================
+         */
+
+        BigDecimal valorCobrado =
+                valorOriginal;
+
+
+        /*
+         * ========================================================
+         * VERIFICAR PAGAMENTO EM ABERTO
+         * ========================================================
          */
 
         boolean existePagamentoEmAberto =
@@ -223,11 +230,29 @@ public class PagamentoService {
                         );
 
         if (existePagamentoEmAberto) {
-
             throw new IllegalArgumentException(
                     "Já existe um pagamento pendente para esta obrigação."
             );
         }
+
+
+        /*
+         * ========================================================
+         * IDENTIFICADORES INTERNOS
+         * ========================================================
+         */
+
+        String externalReference =
+                "MERCURY-PAG-"
+                        + UUID.randomUUID()
+                        .toString()
+                        .replace("-", "")
+                        .toUpperCase();
+
+
+        String idempotencyKey =
+                UUID.randomUUID()
+                        .toString();
 
 
         /*
@@ -247,21 +272,21 @@ public class PagamentoService {
          * ========================================================
          * MERCADO PAGO
          * ========================================================
-         *
-         * Agora utilizamos a Orders API.
          */
 
         MercadoPagoService.MercadoPagoPixResponse pagamentoMercadoPago =
                 mercadoPagoService.criarPagamentoPix(
-                        valor,
+                        valorOriginal,
                         descricao,
-                        "test_user_123@testuser.com"
+                        cliente.getEmail(),
+                        externalReference,
+                        idempotencyKey
                 );
 
 
         /*
          * ========================================================
-         * DADOS DO PIX
+         * DADOS RETORNADOS
          * ========================================================
          */
 
@@ -273,6 +298,8 @@ public class PagamentoService {
 
         String orderId =
                 pagamentoMercadoPago.getOrderId();
+
+        valorCobrado = pagamentoMercadoPago.getValorCobrado();
 
 
         /*
@@ -307,19 +334,6 @@ public class PagamentoService {
 
         /*
          * ========================================================
-         * STATUS INICIAL
-         * ========================================================
-         *
-         * action_required + waiting_transfer significa que
-         * aguardamos o cliente realizar a transferência PIX.
-         */
-
-        StatusPagamento statusPagamento =
-                StatusPagamento.PENDENTE;
-
-
-        /*
-         * ========================================================
          * CRIAR PAGAMENTO LOCAL
          * ========================================================
          */
@@ -348,21 +362,39 @@ public class PagamentoService {
                         )
 
                         .status(
-                                statusPagamento
+                                StatusPagamento.PENDENTE
                         )
 
-                        .valor(
-                                valor
+                        .valorOriginal(
+                                valorOriginal
                         )
 
-                        /*
-                         * Guardamos o ID da Order do Mercado Pago.
-                         *
-                         * Exemplo:
-                         * ORDTST01...
-                         */
+                        .valorCobrado(
+                                valorCobrado
+                        )
+
                         .idPagamentoExterno(
                                 orderId
+                        )
+
+                        .idOrderExterno(
+                                orderId
+                        )
+
+                        .idTransacaoExterna(
+                                pagamentoMercadoPago.getPaymentId()
+                        )
+
+                        .externalReference(
+                                externalReference
+                        )
+
+                        .idempotencyKey(
+                                idempotencyKey
+                        )
+
+                        .urlPagamento(
+                                pagamentoMercadoPago.getTicketUrl()
                         )
 
                         .codigoPix(
@@ -394,7 +426,7 @@ public class PagamentoService {
 
         /*
          * ========================================================
-         * RETORNAR DTO
+         * RETORNAR
          * ========================================================
          */
 
@@ -515,9 +547,6 @@ public class PagamentoService {
      * ============================================================
      * BUSCAR ENTIDADE
      * ============================================================
-     *
-     * Pode ser útil posteriormente para webhook e atualização
-     * do status do pagamento.
      */
 
     @Transactional(readOnly = true)
@@ -654,13 +683,27 @@ public class PagamentoService {
                         pagamento.getStatus()
                 )
 
-                .valor(
-                        pagamento.getValor()
+                .valorOriginal(
+                        pagamento.getValorOriginal()
+                )
+
+                .valorCobrado(
+                        pagamento.getValorCobrado()
                 )
 
                 .idPagamentoExterno(
                         pagamento.getIdPagamentoExterno()
                 )
+
+                .externalReference(
+                        pagamento.getExternalReference()
+                )
+
+                .urlPagamento(
+                        pagamento.getUrlPagamento()
+                )
+
+
 
                 .codigoPix(
                         pagamento.getCodigoPix()
@@ -670,8 +713,20 @@ public class PagamentoService {
                         pagamento.getQrCodePix()
                 )
 
+                .boletoCodigoBarras(
+                        pagamento.getBoletoCodigoBarras()
+                )
+
+                .motivoRecusa(
+                        pagamento.getMotivoRecusa()
+                )
+
                 .dataCriacao(
                         pagamento.getDataCriacao()
+                )
+
+                .dataAtualizacao(
+                        pagamento.getDataAtualizacao()
                 )
 
                 .dataPagamento(
@@ -682,33 +737,93 @@ public class PagamentoService {
                         pagamento.getDataExpiracao()
                 )
 
+                .dataCancelamento(
+                        pagamento.getDataCancelamento()
+                )
+
+                .idOrderExterno(
+                        pagamento.getIdOrderExterno()
+                )
+
+                .idTransacaoExterna(
+                        pagamento.getIdTransacaoExterna()
+                )
+
                 .build();
     }
 
 
+    /*
+     * ============================================================
+     * SIMULAÇÃO DEV
+     * ============================================================
+     */
+
     @Transactional
-    public PagamentoResponseDTO simularAprovacao(Integer idPagamento) {
-        Pagamento pagamento = pagamentoRepository.findById(idPagamento).orElseThrow(() ->
-                new IllegalArgumentException("Pagamento não encontrado."));
+    public PagamentoResponseDTO simularAprovacao(
+            Integer idPagamento
+    ) {
+
+        Pagamento pagamento =
+                pagamentoRepository
+                        .findById(idPagamento)
+                        .orElseThrow(() ->
+                                new IllegalArgumentException(
+                                        "Pagamento não encontrado."
+                                )
+                        );
 
 
-        if (pagamento.getStatus() == StatusPagamento.PAGO) {
-            throw new IllegalArgumentException("Este pagamento já está pago.");
+        if (
+                pagamento.getStatus()
+                        == StatusPagamento.PAGO
+        ) {
+
+            throw new IllegalArgumentException(
+                    "Este pagamento já está pago."
+            );
         }
 
-        if (pagamento.getStatus() == StatusPagamento.CANCELADO) {
-            throw new IllegalStateException("Um pagamento cancelado não pode ser aprovado.");
+
+        if (
+                pagamento.getStatus()
+                        == StatusPagamento.CANCELADO
+        ) {
+
+            throw new IllegalStateException(
+                    "Um pagamento cancelado não pode ser aprovado."
+            );
         }
 
-        if (pagamento.getStatus() == StatusPagamento.ESTORNADO) {
-            throw new IllegalStateException("Um pagamento estornado não pode ser aprovado.");
+
+        if (
+                pagamento.getStatus()
+                        == StatusPagamento.ESTORNADO
+        ) {
+
+            throw new IllegalStateException(
+                    "Um pagamento estornado não pode ser aprovado."
+            );
         }
 
-        pagamento.setStatus(StatusPagamento.PAGO);
-        pagamento.setDataPagamento(LocalDateTime.now());
 
-        Pagamento pagamentoSalvo = pagamentoRepository.save(pagamento);
+        pagamento.setStatus(
+                StatusPagamento.PAGO
+        );
 
-        return converterParaDTO(pagamentoSalvo);
+        pagamento.setDataPagamento(
+                LocalDateTime.now()
+        );
+
+
+        Pagamento pagamentoSalvo =
+                pagamentoRepository.save(
+                        pagamento
+                );
+
+
+        return converterParaDTO(
+                pagamentoSalvo
+        );
     }
 }

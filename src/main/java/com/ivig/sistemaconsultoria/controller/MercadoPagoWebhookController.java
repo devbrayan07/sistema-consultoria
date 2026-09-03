@@ -17,14 +17,18 @@ public class MercadoPagoWebhookController {
     @PostMapping
     public ResponseEntity<Void> receberWebhook(
             HttpServletRequest request,
+
             @RequestParam(
                     name = "data.id",
                     required = false
-            ) String dataId,
+            )
+            String dataId,
+
             @RequestParam(
                     name = "type",
                     required = false
-            ) String type
+            )
+            String type
     ) {
 
         String xSignature =
@@ -32,54 +36,32 @@ public class MercadoPagoWebhookController {
                         "x-signature"
                 );
 
+
         String xRequestId =
                 request.getHeader(
                         "x-request-id"
                 );
 
 
-        System.out.println(
-                "=========================================="
-        );
-
-        System.out.println(
-                "WEBHOOK MERCADO PAGO RECEBIDO"
-        );
-
-        System.out.println(
-                "Type: " + type
-        );
-
-        System.out.println(
-                "Data ID: " + dataId
-        );
-
-        System.out.println(
-                "Request ID: " + xRequestId
-        );
-
-        System.out.println(
-                "=========================================="
-        );
-
-
         /*
-         * =========================================================
-         * DADOS OBRIGATÓRIOS PARA VALIDAÇÃO
-         * =========================================================
+         * ========================================================
+         * VALIDAR DADOS BÁSICOS
+         * ========================================================
          */
 
-        if (xSignature == null
-                || xSignature.isBlank()
-                || xRequestId == null
-                || xRequestId.isBlank()
-                || dataId == null
-                || dataId.isBlank()) {
-
-            System.out.println(
-                    "Webhook rejeitado: dados de assinatura ausentes."
-            );
-
+        if (
+                xSignature == null
+                        ||
+                        xSignature.isBlank()
+                        ||
+                        xRequestId == null
+                        ||
+                        xRequestId.isBlank()
+                        ||
+                        dataId == null
+                        ||
+                        dataId.isBlank()
+        ) {
 
             return ResponseEntity
                     .badRequest()
@@ -88,9 +70,9 @@ public class MercadoPagoWebhookController {
 
 
         /*
-         * =========================================================
-         * VALIDAÇÃO DA ASSINATURA
-         * =========================================================
+         * ========================================================
+         * VALIDAR ASSINATURA
+         * ========================================================
          */
 
         boolean assinaturaValida =
@@ -103,11 +85,6 @@ public class MercadoPagoWebhookController {
 
         if (!assinaturaValida) {
 
-            System.out.println(
-                    "Webhook rejeitado: assinatura inválida."
-            );
-
-
             return ResponseEntity
                     .status(401)
                     .build();
@@ -115,24 +92,23 @@ public class MercadoPagoWebhookController {
 
 
         /*
-         * =========================================================
-         * FILTRAGEM DO TIPO
-         * =========================================================
+         * ========================================================
+         * FILTRAR TIPO
+         * ========================================================
          */
 
-        if (type != null
-                && !type.isBlank()
-                && !type.equalsIgnoreCase("order")) {
-
-            System.out.println(
-                    "Webhook ignorado: tipo diferente de order."
-            );
-
+        if (
+                type == null
+                        ||
+                        !type.equalsIgnoreCase(
+                                "order"
+                        )
+        ) {
 
             /*
-             * Retornamos 200 porque a notificação foi recebida
-             * corretamente, apenas não é relevante para este fluxo.
+             * Evento válido, mas não pertence ao fluxo de Orders.
              */
+
             return ResponseEntity
                     .ok()
                     .build();
@@ -140,43 +116,61 @@ public class MercadoPagoWebhookController {
 
 
         /*
-         * =========================================================
-         * ASSINATURA VÁLIDA
-         * =========================================================
+         * ========================================================
+         * PROCESSAR ORDER
+         * ========================================================
          */
 
-        System.out.println(
-                "=========================================="
-        );
+        try {
 
-        System.out.println(
-                "WEBHOOK MERCADO PAGO AUTÊNTICO"
-        );
-
-        System.out.println(
-                "Order ID: " + dataId
-        );
-
-        System.out.println(
-                "=========================================="
-        );
+            webhookService.processarOrder(
+                    dataId
+            );
 
 
-        /*
-         * Próxima etapa:
-         *
-         * mercadoPagoService.buscarOrder(dataId);
-         *
-         * Depois:
-         *
-         * localizar Pagamento por idPagamentoExterno
-         * verificar status real da Order
-         * atualizar Pagamento
-         */
+            return ResponseEntity
+                    .ok()
+                    .build();
+
+        } catch (IllegalArgumentException erro) {
+
+            /*
+             * A notificação pode ser legítima, mas eventualmente
+             * pertencer a uma Order que não existe no nosso banco.
+             *
+             * Retornamos 200 para impedir retries infinitos de um
+             * evento que não conseguimos relacionar.
+             */
+
+            System.out.println(
+                    "Webhook ignorado: "
+                            + erro.getMessage()
+            );
 
 
-        return ResponseEntity
-                .ok()
-                .build();
+            return ResponseEntity
+                    .ok()
+                    .build();
+
+        } catch (Exception erro) {
+
+            /*
+             * Falha temporária:
+             * banco indisponível, Mercado Pago indisponível etc.
+             *
+             * Não devolvemos 200 porque queremos permitir nova
+             * tentativa do provedor.
+             */
+
+            System.err.println(
+                    "Erro ao processar webhook Mercado Pago: "
+                            + erro.getMessage()
+            );
+
+
+            return ResponseEntity
+                    .internalServerError()
+                    .build();
+        }
     }
 }
